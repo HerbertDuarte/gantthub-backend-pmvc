@@ -27,6 +27,7 @@ import { PaginateUsuarioDto } from '../dto/paginate-usuario.dto';
 import { AtualizaPerfilUsuarioDto } from '../dto/atualiza-perfil.dto';
 import { AtualizarPerfilUsuarioUseCase } from '../usecases/atualiza-perfil.usecase';
 import { Request } from 'express';
+import { UsuarioEntity } from '../entity/usuario.entity';
 
 @ApiBearerAuth()
 @Controller('usuarios')
@@ -44,7 +45,7 @@ export class UsuarioController {
   @Post()
   @Roles(EnumUsuarioNivel.ADMIN)
   @UseGuards(AuthGuard(), RolesGuard)
-  async cria(@Body() dados: CriaUsuarioDto): Promise<Usuario> {
+  async cria(@Body() dados: CriaUsuarioDto): Promise<UsuarioEntity> {
     return this.criarUsuarioUseCase.execute(dados);
   }
 
@@ -56,7 +57,7 @@ export class UsuarioController {
 
   @Get('/:id')
   @UseGuards(AuthGuard())
-  async buscaPorId(@Param('id') id: string): Promise<Usuario> {
+  async buscaPorId(@Param('id') id: string): Promise<UsuarioEntity> {
     return this.buscarPorIdUsuarioUseCase.execute(id);
   }
 

@@ -7,6 +7,7 @@ import { AtualizaPerfilUsuarioDto } from '../dto/atualiza-perfil.dto';
 import { SenhaValidaValidator } from '../validators/senha-valida.validator';
 import { CriaUsuarioDto } from '../dto/cria-usuario.dto';
 import { HashUtils } from 'lib-test-herbert';
+import { UsuarioEntity } from '../entity/usuario.entity';
 
 @Injectable()
 export class AtualizarPerfilUsuarioUseCase implements UseCase<Usuario> {
@@ -34,6 +35,19 @@ export class AtualizarPerfilUsuarioUseCase implements UseCase<Usuario> {
       atualizaUsuarioPayload,
     );
 
-    await this.usuarioRepository.atualiza(id, atualizaUsuarioPayload);
+    const usuario = new UsuarioEntity({
+      id: usuarioExists.getId(),
+      email: usuarioExists.getEmail(),
+      nome: usuarioExists.getNome(),
+      login: usuarioExists.getLogin(),
+      createdAt: usuarioExists.getCreatedAt(),
+      deletedAt: usuarioExists.getDeletedAt(),
+      updatedAt: new Date(),
+      senha: usuarioExists.getSenha(),
+      situacao: usuarioExists.getSituacao(),
+      ...atualizaUsuarioPayload,
+    });
+
+    await this.usuarioRepository.atualiza(id, usuario);
   }
 }

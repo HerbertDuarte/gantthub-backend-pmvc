@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -11,16 +8,82 @@ datasource db {
 }
 
 model Usuario {
-  id        String    @id @default(uuid())
+  id        String   @id @default(uuid())
   nome      String
-  email     String    @unique
-  nivel     String
-  situacao  String
-  login     String    @unique
+  email     String   @unique
+  situacao  Int      @default(1)
+  login     String   @unique
   senha     String
-  createdAt DateTime  @default(now()) @db.Timestamptz(3)
-  updatedAt DateTime  @updatedAt @db.Timestamptz(3)
-  deletedAt DateTime?
+  createdAt DateTime @default(now()) @db.Timestamptz(3)
+  updatedAt DateTime @updatedAt @db.Timestamptz(3)
 
-  @@map("usuarios") //Nome da tabela
+  tarefaId       String?
+  UsuarioTarefa  UsuarioTarefa[]
+  UsuarioProjeto UsuarioProjeto[]
+
+  @@map("usuarios")
+}
+
+model Projeto {
+  id        String  @id @default(uuid())
+  nome      String
+  descricao String
+  marcos    Marco[]
+
+  createdAt      DateTime         @default(now()) @db.Timestamptz(3)
+  updatedAt      DateTime         @updatedAt @db.Timestamptz(3)
+  UsuarioProjeto UsuarioProjeto[]
+
+  @@map("projetos")
+}
+
+model Marco {
+  id      String   @id @default(uuid())
+  nome    String
+  tarefas Tarefa[]
+
+  projeto   Projeto @relation(fields: [projetoId], references: [id])
+  projetoId String
+
+  @@map("marcos")
+}
+
+model Tarefa {
+  id         String   @id @default(uuid())
+  nome       String
+  descricao  String
+  dataInicio DateTime
+  dataFim    DateTime
+  status     Int
+
+  createdAt DateTime @default(now()) @db.Timestamptz(3)
+  updatedAt DateTime @updatedAt @db.Timestamptz(3)
+
+  marco   Marco  @relation(fields: [marcoId], references: [id])
+  marcoId String
+
+  UsuarioTarefa UsuarioTarefa[]
+
+  @@map("tarefas")
+}
+
+model UsuarioTarefa {
+  usuario   Usuario @relation(fields: [usuarioId], references: [id])
+  tarefa    Tarefa  @relation(fields: [tarefaId], references: [id])
+  usuarioId String
+  tarefaId  String
+
+  @@id([usuarioId, tarefaId])
+  @@map("usuarioTarefa")
+}
+
+model UsuarioProjeto {
+  usuario     Usuario @relation(fields: [usuarioId], references: [id])
+  projeto     Projeto @relation(fields: [projetoId], references: [id])
+  tipoVinculo Int
+  usuarioId   String
+  projetoId   String
+
+  @@id([usuarioId, projetoId])
+  @@map("usuarioProjeto")
 }

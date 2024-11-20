@@ -1,22 +1,18 @@
-version: "3.7"
+version: '3.8'
 
 services:
-  modelo-api:
-    restart: always
-    build:
-      context: .
-      dockerfile: Dockerfile
+  postgres:
+    image: postgres:15
+    container_name: ganttly_db
     environment:
-      - APP_NAME
-      - HTTP_PORT
-    volumes:
-      - ../../ssl:/app/ssl
+      POSTGRES_USER: postgres # Substitua pelo nome de usuário desejado
+      POSTGRES_PASSWORD: postgres # Substitua pela senha desejada
+      POSTGRES_DB: ganttly_db # Substitua pelo nome do banco de dados desejado
     ports:
-      - "${HTTP_PORT}:${HTTP_PORT}"
-    command: npm run start
-    networks:
-      - srvweb-network
+      - '2345:5432' # Mapeia a porta 5432 do container para a porta 5432 do host
+    volumes:
+      - postgres_data:/var/lib/postgresql/data # Persistência de dados
 
-networks:
-  srvweb-network:
-    driver: bridge
+volumes:
+  postgres_data:
+    driver: local

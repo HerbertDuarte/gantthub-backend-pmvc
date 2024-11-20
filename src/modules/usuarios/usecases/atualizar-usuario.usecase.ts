@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 import { UsuarioRepository } from '../repository/usuario.repository';
 import { Usuario } from '@prisma/client';
 import { UseCase } from 'src/core/interfaces/usecase.interface';
@@ -7,9 +7,10 @@ import { UpdateUsuarioValidator } from '../validators/update-usuario.validator';
 import { SenhaValidaValidator } from '../validators/senha-valida.validator';
 import { CriaUsuarioDto } from '../dto/cria-usuario.dto';
 import { HashUtils } from 'lib-test-herbert';
+import { UsuarioEntity } from '../entity/usuario.entity';
 
 @Injectable()
-export class AtualizarUsuarioUseCase implements UseCase<Usuario> {
+export class AtualizarUsuarioUseCase implements UseCase<UsuarioEntity> {
   constructor(
     private readonly usuarioRepository: UsuarioRepository,
     private readonly updateUsuarioValidator: UpdateUsuarioValidator,
@@ -18,6 +19,8 @@ export class AtualizarUsuarioUseCase implements UseCase<Usuario> {
 
   async execute(id: string, data: AtualizaUsuarioDto): Promise<void> {
     const usuarioExists = await this.usuarioRepository.buscaPorId(id);
+    if (!usuarioExists) throw new ConflictException('Usuário não encontrado.');
+
     const atualizaUsuarioPayload: Partial<CriaUsuarioDto> = data;
 
     const atualizaSenha = data.senhaNova;
@@ -32,6 +35,19 @@ export class AtualizarUsuarioUseCase implements UseCase<Usuario> {
       atualizaUsuarioPayload,
     );
 
-    await this.usuarioRepository.atualiza(id, atualizaUsuarioPayload);
+    const usuario = new UsuarioEntity({
+      id: usuarioExists.getId(),
+      email: usuarioExists.getEmail(),
+      nome: usuarioExists.getNome(),
+      login: usuarioExists.getLogin(),
+      createdAt: usuarioExists.getCreatedAt(),
+      deletedAt: usuarioExists.getDeletedAt(),
+      updatedAt: new Date(),
+      senha: usuarioExists.getSenha(),
+      situacao: usuarioExists.getSituacao(),
+      ...atualizaUsuarioPayload,
+    });
+
+    await this.usuarioRepository.atualiza(id, usuario);
   }
 }

@@ -1,14 +1,14 @@
 import { ConflictException, Injectable, Logger } from '@nestjs/common';
 import { HashUtils } from 'lib-test-herbert';
 import { AtualizaPerfilUsuarioDto } from '../dto/atualiza-perfil.dto';
-import { Usuario } from '@prisma/client';
+import { UsuarioEntity } from '../entity/usuario.entity';
 
 @Injectable()
 export class SenhaValidaValidator {
   private readonly logger = new Logger(SenhaValidaValidator.name);
 
   async validate(
-    usuario: Usuario,
+    usuario: UsuarioEntity,
     { senhaAntiga, senhaNova }: AtualizaPerfilUsuarioDto,
   ): Promise<void> {
     if (senhaNova) {
@@ -20,7 +20,7 @@ export class SenhaValidaValidator {
 
       const senhaCorreta = await HashUtils.comparaString(
         senhaAntiga,
-        usuario.senha,
+        usuario.getSenha(),
       );
       if (!senhaCorreta) {
         this.logger.error(

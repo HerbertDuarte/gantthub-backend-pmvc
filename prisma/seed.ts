@@ -8,8 +8,7 @@ async function main() {
     data: {
       nome: 'Admin',
       email: 'admin@mail.com',
-      nivel: 'Administrador',
-      situacao: 'Ativo',
+      situacao: 1,
       login: 'admin',
       senha: '$2b$10$3JEcQYwkwgtT1sM0pwQn.eLRfDYZQR1YVP3JGZr.d0VCkog6YQ3oe',
     },

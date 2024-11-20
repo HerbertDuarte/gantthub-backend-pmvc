@@ -2,7 +2,7 @@ import { Strategy } from 'passport-local';
 import { PassportStrategy } from '@nestjs/passport';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { AuthUsuarioValidator } from '../../validators/auth-usuario.validator';
-import { Usuario } from '@prisma/client';
+import { UsuarioEntity } from 'src/modules/usuarios/entity/usuario.entity';
 
 @Injectable()
 export class LocalStrategy extends PassportStrategy(Strategy) {
@@ -10,7 +10,7 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
     super();
   }
 
-  async validate(login: string, senha: string): Promise<Usuario> {
+  async validate(login: string, senha: string): Promise<UsuarioEntity> {
     const usuario = await this.authUsuarioValidator.validate({ login, senha });
     if (!usuario) {
       throw new UnauthorizedException('Usuário ou senha inválidos!');
