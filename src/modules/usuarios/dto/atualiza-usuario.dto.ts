@@ -1,7 +1,12 @@
-import { IsOptional, IsString, IsEmail } from 'class-validator';
+import {
+  IsOptional,
+  IsString,
+  IsEmail,
+  IsNumber,
+  IsEnum,
+} from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { EnumSituacaoUsuario } from '../enum/usuario-situacao.enum';
-import { EnumUsuarioNivel } from '../enum/usuario-nivel.enum';
 
 export class AtualizaUsuarioDto {
   @ApiProperty()
@@ -16,12 +21,8 @@ export class AtualizaUsuarioDto {
 
   @ApiProperty()
   @IsOptional()
-  @IsString()
-  nivel?: EnumUsuarioNivel;
-
-  @ApiProperty()
-  @IsOptional()
-  @IsString()
+  @IsEnum(EnumSituacaoUsuario)
+  @IsNumber()
   situacao?: EnumSituacaoUsuario;
 
   @ApiProperty()

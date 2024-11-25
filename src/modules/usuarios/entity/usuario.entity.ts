@@ -5,7 +5,7 @@ import { hashSync } from 'bcryptjs';
 import { isEmail } from 'lib/string/is-email';
 import { hasSymbols } from 'lib/string/has-symbols';
 import { hasUppercase } from 'lib/string/has-uppercase';
-import { hasLowercase } from 'lib/string/has-lowercase';
+import { hasLowercase } from 'lib/string/has-lower-case';
 import { hasNumber } from 'lib/string/has-number';
 
 type UsuarioProps = {

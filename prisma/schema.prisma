@@ -17,7 +17,6 @@ model Usuario {
   createdAt DateTime @default(now()) @db.Timestamptz(3)
   updatedAt DateTime @updatedAt @db.Timestamptz(3)
 
-  tarefaId       String?
   UsuarioTarefa  UsuarioTarefa[]
   UsuarioProjeto UsuarioProjeto[]
 

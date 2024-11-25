@@ -1,6 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsEnum, IsNumber, IsOptional, IsString } from 'class-validator';
-import { EnumUsuarioNivel } from '../enum/usuario-nivel.enum';
 import { Transform } from 'class-transformer';
 import { PaginatePropsBase } from 'lib-test-herbert';
 
@@ -19,9 +18,4 @@ export class PaginateUsuarioDto implements PaginatePropsBase {
   @IsString()
   @IsOptional()
   busca?: string;
-
-  @ApiProperty()
-  @IsEnum(EnumUsuarioNivel)
-  @IsOptional()
-  nivel?: EnumUsuarioNivel;
 }

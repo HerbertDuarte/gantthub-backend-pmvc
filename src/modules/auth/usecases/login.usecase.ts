@@ -12,14 +12,12 @@ export class LoginUseCase implements UseCase<LoginResponseDto> {
     const payload = {
       login: usuario.login,
       sub: usuario.id,
-      nivel: usuario.nivel,
     };
     const usuarioId = usuario.id;
 
     return {
       access_token: this.jwtService.sign(payload),
       usuarioId,
-      nivel: usuario.nivel,
     };
   }
 }

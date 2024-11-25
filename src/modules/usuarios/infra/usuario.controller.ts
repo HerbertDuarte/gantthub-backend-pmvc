@@ -13,16 +13,13 @@ import {
 import { AuthGuard } from '@nestjs/passport';
 import { AtualizaUsuarioDto } from '../dto/atualiza-usuario.dto';
 import { CriaUsuarioDto } from '../dto/cria-usuario.dto';
-import { Roles } from 'src/modules/auth/roles/roles.decorator';
 import { RolesGuard } from 'src/modules/auth/infra/guard/roles.guard';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { Usuario } from '@prisma/client';
 import { AtualizarUsuarioUseCase } from '../usecases/atualizar-usuario.usecase';
 import { BuscarPorIdUsuarioUseCase } from '../usecases/buscar-por-id-usuario.usecase';
 import { BuscarUsuariosPaginacaoUseCase } from '../usecases/buscar-usuarios-paginacao.usecase';
 import { CriarUsuarioUseCase } from '../usecases/criar-usuario.usecase';
 import { DeletarUsuarioUseCase } from '../usecases/deletar-usuario.usecase';
-import { EnumUsuarioNivel } from '../enum/usuario-nivel.enum';
 import { PaginateUsuarioDto } from '../dto/paginate-usuario.dto';
 import { AtualizaPerfilUsuarioDto } from '../dto/atualiza-perfil.dto';
 import { AtualizarPerfilUsuarioUseCase } from '../usecases/atualiza-perfil.usecase';
@@ -43,7 +40,6 @@ export class UsuarioController {
   ) {}
 
   @Post()
-  @Roles(EnumUsuarioNivel.ADMIN)
   @UseGuards(AuthGuard(), RolesGuard)
   async cria(@Body() dados: CriaUsuarioDto): Promise<UsuarioEntity> {
     return this.criarUsuarioUseCase.execute(dados);
@@ -81,7 +77,6 @@ export class UsuarioController {
   }
 
   @Delete('/:id')
-  @Roles(EnumUsuarioNivel.ADMIN)
   @UseGuards(AuthGuard(), RolesGuard)
   async deleta(@Param('id') id: string): Promise<void> {
     return this.deletarUsuarioUseCase.execute(id);

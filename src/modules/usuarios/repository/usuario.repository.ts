@@ -20,7 +20,7 @@ export class UsuarioRepository implements IUsuarioRepository {
   async buscaTodos(
     props: PaginateUsuarioDto,
   ): Promise<PaginateResponse<UsuarioEntity>> {
-    const { busca, pagina, itensPorPagina, nivel } = props;
+    const { busca, pagina, itensPorPagina } = props;
     const paginateUtil = new PaginateUtil<UsuarioEntity>(this.prismaService);
 
     return paginateUtil.execute({
@@ -28,9 +28,6 @@ export class UsuarioRepository implements IUsuarioRepository {
       busca,
       pagina,
       itensPorPagina,
-      queries: {
-        nivel,
-      },
     });
   }
 

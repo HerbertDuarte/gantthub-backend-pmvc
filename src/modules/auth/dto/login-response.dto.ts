@@ -5,6 +5,4 @@ export class LoginResponseDto {
   access_token: string;
   @ApiProperty()
   usuarioId: string;
-  @ApiProperty()
-  nivel: string;
 }
