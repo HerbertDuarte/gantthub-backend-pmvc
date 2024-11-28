@@ -1,8 +1,7 @@
 import { Module, OnModuleDestroy } from '@nestjs/common';
-import { AuthModule } from './modules/auth/infra/auth.module';
-import { UsuarioModule } from './modules/usuarios/infra/usuario.module';
 import { ConfigModule } from '@nestjs/config';
 import { validateEnv } from 'env/environment.dto';
+import { InfrastructureModule } from './infrastructure/infrastructure.module';
 
 @Module({
   imports: [
@@ -11,8 +10,7 @@ import { validateEnv } from 'env/environment.dto';
       envFilePath: '.env',
       validate: validateEnv,
     }),
-    AuthModule,
-    UsuarioModule,
+    InfrastructureModule,
   ],
   controllers: [],
   providers: [],

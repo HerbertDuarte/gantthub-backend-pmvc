@@ -2,9 +2,9 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import { NestExpressApplication } from '@nestjs/platform-express';
-import { swaggerConfig } from './plugins/swagger/swagger.config';
-import { sslConfig } from './plugins/ssl/ssl-config';
-import { bootstrapLogger } from './plugins/system-logs/bootstrap-logger';
+import { swaggerConfig } from './infrastructure/plugins/swagger/swagger.config';
+import { sslConfig } from './infrastructure/plugins/ssl/ssl-config';
+import { bootstrapLogger } from './infrastructure/plugins/system-logs/bootstrap-logger';
 
 async function bootstrap() {
   const httpsOptions = sslConfig();

@@ -1,21 +1,21 @@
 import { Module, Provider } from '@nestjs/common';
-import { DatabaseModule } from 'src/plugins/database/database.module';
-import { UsuarioController } from './usuario.controller';
+import { DatabaseModule } from 'src/infrastructure/plugins/database/database.module';
+import { UsuarioController } from '../../../infrastructure/adapter/controller/usuario.controller';
 import { PassportModule } from '@nestjs/passport';
-import { UsuarioRepository } from '../repository/usuario.repository';
-import { CriarUsuarioUseCase } from '../usecases/criar-usuario.usecase';
-import { AtualizarUsuarioUseCase } from '../usecases/atualizar-usuario.usecase';
-import { DeletarUsuarioUseCase } from '../usecases/deletar-usuario.usecase';
-import { BuscarPorIdUsuarioUseCase } from '../usecases/buscar-por-id-usuario.usecase';
-import { BuscarUsuariosPaginacaoUseCase } from '../usecases/buscar-usuarios-paginacao.usecase';
-import { EmailJaCadastradoValidator } from '../validators/email-ja-cadastrado.validator';
-import { LoginJaCadastradoValidator } from '../validators/login-ja-cadastrado.validator';
-import { UpdateUsuarioValidator } from '../validators/update-usuario.validator';
-import { AtualizarPerfilUsuarioUseCase } from '../usecases/atualiza-perfil.usecase';
-import { SenhaValidaValidator } from '../validators/senha-valida.validator';
+import { UsuarioTypeOrmRepository } from '../../../infrastructure/repository/usuario-typeorm.repository';
+import { CriarUsuarioUseCase } from '../../../domain/application/usecases/criar-usuario.usecase';
+import { AtualizarUsuarioUseCase } from '../../../domain/application/usecases/atualizar-usuario.usecase';
+import { DeletarUsuarioUseCase } from '../../../domain/application/usecases/deletar-usuario.usecase';
+import { BuscarPorIdUsuarioUseCase } from '../../../domain/application/usecases/buscar-por-id-usuario.usecase';
+import { BuscarUsuariosPaginacaoUseCase } from '../../../domain/application/usecases/buscar-usuarios-paginacao.usecase';
+import { EmailJaCadastradoValidator } from '../../../domain/application/validators/email-ja-cadastrado.validator';
+import { LoginJaCadastradoValidator } from '../../../domain/application/validators/login-ja-cadastrado.validator';
+import { UpdateUsuarioValidator } from '../../../domain/application/validators/update-usuario.validator';
+import { AtualizarPerfilUsuarioUseCase } from '../../../domain/application/usecases/atualiza-perfil.usecase';
+import { SenhaValidaValidator } from '../../../domain/application/validators/senha-valida.validator';
 
 const providers: Provider[] = [
-  UsuarioRepository,
+  UsuarioTypeOrmRepository,
   CriarUsuarioUseCase,
   AtualizarUsuarioUseCase,
   DeletarUsuarioUseCase,
@@ -25,7 +25,7 @@ const providers: Provider[] = [
   EmailJaCadastradoValidator,
   LoginJaCadastradoValidator,
   UpdateUsuarioValidator,
-  SenhaValidaValidator
+  SenhaValidaValidator,
 ];
 
 @Module({

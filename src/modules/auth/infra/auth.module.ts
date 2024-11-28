@@ -1,13 +1,13 @@
 import { Logger, Module, Provider } from '@nestjs/common';
-import { AuthController } from './auth.controller';
+import { AuthController } from '../../../infrastructure/adapter/controller/auth.controller';
 import { UsuarioModule } from '../../usuarios/infra/usuario.module';
 import { PassportModule } from '@nestjs/passport';
-import { LocalStrategy } from './strategy/local.strategy';
+import { LocalStrategy } from '../../../infrastructure/adapter/strategy/local.strategy';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { JwtStrategy } from './strategy/jwt.strategy';
-import { LoginUseCase } from '../usecases/login.usecase';
-import { AuthUsuarioValidator } from '../validators/auth-usuario.validator';
+import { JwtStrategy } from '../../../infrastructure/adapter/strategy/jwt.strategy';
+import { LoginUseCase } from '../../../domain/application/usecases/login.usecase';
+import { AuthUsuarioValidator } from '../../../domain/application/validators/auth-usuario.validator';
 
 const providers: Provider[] = [
   LoginUseCase,
