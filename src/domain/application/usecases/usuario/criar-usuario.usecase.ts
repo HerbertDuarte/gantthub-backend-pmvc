@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
-import { CriaUsuarioDto } from '../dto/usuario/cria-usuario.dto';
-import { UsuarioTypeOrmRepository } from '../../../infrastructure/repository/usuario-typeorm.repository';
+import { CriaUsuarioDto } from '../../dto/usuario/cria-usuario.dto';
+import { UsuarioTypeOrmRepository } from '../../../../infrastructure/repository/usuario-typeorm.repository';
 import { HashUtils } from 'lib-test-herbert';
-import { EmailJaCadastradoValidator } from '../validators/email-ja-cadastrado.validator';
-import { LoginJaCadastradoValidator } from '../validators/login-ja-cadastrado.validator';
+import { EmailJaCadastradoValidator } from '../../validators/email-ja-cadastrado.validator';
+import { LoginJaCadastradoValidator } from '../../validators/login-ja-cadastrado.validator';
 import { UseCase } from 'src/core/interfaces/usecase.interface';
-import { UsuarioEntity } from '../../entity/usuario.entity';
+import { UsuarioEntity } from '../../../entity/usuario.entity';
 
 @Injectable()
 export class CriarUsuarioUseCase implements UseCase<UsuarioEntity> {

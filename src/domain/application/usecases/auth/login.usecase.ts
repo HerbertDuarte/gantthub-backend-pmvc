@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UseCase } from 'src/core/interfaces/usecase.interface';
-import { LoginResponseDto } from '../dto/auth/login-response.dto';
-import { UsuarioDecodedDto } from '../dto/auth/usuario-decoded.dto';
+import { LoginResponseDto } from '../../dto/auth/login-response.dto';
+import { UsuarioDecodedDto } from '../../dto/auth/usuario-decoded.dto';
 
 @Injectable()
 export class LoginUseCase implements UseCase<LoginResponseDto> {

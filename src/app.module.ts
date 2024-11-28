@@ -1,4 +1,4 @@
-import { Module, OnModuleDestroy } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { validateEnv } from 'env/environment.dto';
 import { InfrastructureModule } from './infrastructure/infrastructure.module';
@@ -12,12 +12,5 @@ import { InfrastructureModule } from './infrastructure/infrastructure.module';
     }),
     InfrastructureModule,
   ],
-  controllers: [],
-  providers: [],
 })
-export class AppModule implements OnModuleDestroy {
-  onModuleDestroy() {
-    console.log('App is shutting down...');
-    // Aqui você pode limpar recursos ou fechar conexões ativamente
-  }
-}
+export class AppModule {}

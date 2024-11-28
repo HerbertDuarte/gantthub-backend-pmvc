@@ -15,16 +15,16 @@ import { AtualizaUsuarioDto } from '../../../domain/application/dto/usuario/atua
 import { CriaUsuarioDto } from '../../../domain/application/dto/usuario/cria-usuario.dto';
 import { RolesGuard } from 'src/infrastructure/adapter/guard/roles.guard';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { AtualizarUsuarioUseCase } from '../../../domain/application/usecases/atualizar-usuario.usecase';
-import { BuscarPorIdUsuarioUseCase } from '../../../domain/application/usecases/buscar-por-id-usuario.usecase';
-import { BuscarUsuariosPaginacaoUseCase } from '../../../domain/application/usecases/buscar-usuarios-paginacao.usecase';
-import { CriarUsuarioUseCase } from '../../../domain/application/usecases/criar-usuario.usecase';
-import { DeletarUsuarioUseCase } from '../../../domain/application/usecases/deletar-usuario.usecase';
+import { CriarUsuarioUseCase } from '../../../domain/application/usecases/usuario/criar-usuario.usecase';
+import { DeletarUsuarioUseCase } from '../../../domain/application/usecases/usuario/deletar-usuario.usecase';
 import { PaginateUsuarioDto } from '../../../domain/application/dto/usuario/paginate-usuario.dto';
 import { AtualizaPerfilUsuarioDto } from '../../../domain/application/dto/usuario/atualiza-perfil.dto';
-import { AtualizarPerfilUsuarioUseCase } from '../../../domain/application/usecases/atualiza-perfil.usecase';
+import { AtualizarPerfilUsuarioUseCase } from '../../../domain/application/usecases/usuario/atualiza-perfil.usecase';
 import { Request } from 'express';
 import { UsuarioEntity } from '../../../domain/entity/usuario.entity';
+import { AtualizarUsuarioUseCase } from 'src/domain/application/usecases/usuario/atualizar-usuario.usecase';
+import { BuscarPorIdUsuarioUseCase } from 'src/domain/application/usecases/usuario/buscar-por-id-usuario.usecase';
+import { BuscarUsuariosPaginacaoUseCase } from 'src/domain/application/usecases/usuario/buscar-usuarios-paginacao.usecase';
 
 @ApiBearerAuth()
 @Controller('usuarios')

@@ -1,13 +1,12 @@
-import { ConflictException, Injectable } from '@nestjs/common';
-import { UsuarioTypeOrmRepository } from '../../../infrastructure/repository/usuario-typeorm.repository';
-import { Usuario } from '@prisma/client';
-import { UseCase } from 'src/core/interfaces/usecase.interface';
-import { AtualizaUsuarioDto } from '../dto/usuario/atualiza-usuario.dto';
-import { UpdateUsuarioValidator } from '../validators/update-usuario.validator';
-import { SenhaValidaValidator } from '../validators/senha-valida.validator';
-import { CriaUsuarioDto } from '../dto/usuario/cria-usuario.dto';
+import { Injectable, ConflictException } from '@nestjs/common';
 import { HashUtils } from 'lib-test-herbert';
-import { UsuarioEntity } from '../../entity/usuario.entity';
+import { UseCase } from 'src/core/interfaces/usecase.interface';
+import { UsuarioEntity } from 'src/domain/entity/usuario.entity';
+import { UsuarioTypeOrmRepository } from 'src/infrastructure/repository/usuario-typeorm.repository';
+import { AtualizaUsuarioDto } from '../../dto/usuario/atualiza-usuario.dto';
+import { CriaUsuarioDto } from '../../dto/usuario/cria-usuario.dto';
+import { SenhaValidaValidator } from '../../validators/senha-valida.validator';
+import { UpdateUsuarioValidator } from '../../validators/update-usuario.validator';
 
 @Injectable()
 export class AtualizarUsuarioUseCase implements UseCase<UsuarioEntity> {

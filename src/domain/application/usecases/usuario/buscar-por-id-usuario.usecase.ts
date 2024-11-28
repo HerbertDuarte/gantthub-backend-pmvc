@@ -1,7 +1,7 @@
 import { Injectable, Logger, NotFoundException } from '@nestjs/common';
-import { UsuarioTypeOrmRepository } from '../../../infrastructure/repository/usuario-typeorm.repository';
 import { UseCase } from 'src/core/interfaces/usecase.interface';
-import { UsuarioEntity } from '../../entity/usuario.entity';
+import { UsuarioEntity } from 'src/domain/entity/usuario.entity';
+import { UsuarioTypeOrmRepository } from 'src/infrastructure/repository/usuario-typeorm.repository';
 
 @Injectable()
 export class BuscarPorIdUsuarioUseCase implements UseCase<UsuarioEntity> {

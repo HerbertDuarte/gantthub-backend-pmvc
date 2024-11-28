@@ -1,5 +1,5 @@
 import { Injectable, Logger, NotFoundException } from '@nestjs/common';
-import { UsuarioTypeOrmRepository } from '../../../infrastructure/repository/usuario-typeorm.repository';
+import { UsuarioTypeOrmRepository } from '../../../../infrastructure/repository/usuario-typeorm.repository';
 import { Usuario } from '@prisma/client';
 import { UseCase } from 'src/core/interfaces/usecase.interface';
 

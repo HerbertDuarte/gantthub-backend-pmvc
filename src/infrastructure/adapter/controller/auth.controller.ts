@@ -1,6 +1,6 @@
 import { Controller, Logger, Post, Req, UseGuards } from '@nestjs/common';
 import { ApiBody, ApiTags } from '@nestjs/swagger';
-import { LoginUseCase } from '../../../domain/application/usecases/login.usecase';
+import { LoginUseCase } from '../../../domain/application/usecases/auth/login.usecase';
 import { AutenticaUsuarioDto } from '../../../domain/application/dto/auth/autentica-usuario.dto';
 import { LocalAuthGuard } from '../guard/local-auth.guard';
 import { Request } from 'express';
