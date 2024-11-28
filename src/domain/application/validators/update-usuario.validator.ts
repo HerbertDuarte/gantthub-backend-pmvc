@@ -2,7 +2,7 @@ import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { AtualizaUsuarioDto } from '../dto/usuario/atualiza-usuario.dto';
 import { EmailJaCadastradoValidator } from './email-ja-cadastrado.validator';
 import { LoginJaCadastradoValidator } from './login-ja-cadastrado.validator';
-import { UsuarioEntity } from '../../entity/usuario.entity';
+import { Usuario } from '../../entity/usuario';
 
 @Injectable()
 export class UpdateUsuarioValidator {
@@ -12,7 +12,7 @@ export class UpdateUsuarioValidator {
     private readonly loginJaCadastradoValidator: LoginJaCadastradoValidator,
   ) {}
 
-  async validate(usuario: UsuarioEntity, data: AtualizaUsuarioDto) {
+  async validate(usuario: Usuario, data: AtualizaUsuarioDto) {
     if (!usuario) {
       this.logger.error('Usuario não existe.');
       throw new NotFoundException('Usuario não existe');

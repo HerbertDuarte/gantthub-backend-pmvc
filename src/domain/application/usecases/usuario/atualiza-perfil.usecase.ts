@@ -1,13 +1,12 @@
 import { ConflictException, Injectable } from '@nestjs/common';
 import { UsuarioTypeOrmRepository } from '../../../../infrastructure/repository/usuario-typeorm.repository';
-import { Usuario } from '@prisma/client';
 import { UseCase } from 'src/core/interfaces/usecase.interface';
 import { UpdateUsuarioValidator } from '../../validators/update-usuario.validator';
 import { AtualizaPerfilUsuarioDto } from '../../dto/usuario/atualiza-perfil.dto';
 import { SenhaValidaValidator } from '../../validators/senha-valida.validator';
 import { CriaUsuarioDto } from '../../dto/usuario/cria-usuario.dto';
 import { HashUtils } from 'lib-test-herbert';
-import { UsuarioEntity } from '../../../entity/usuario.entity';
+import { Usuario } from '../../../entity/usuario';
 
 @Injectable()
 export class AtualizarPerfilUsuarioUseCase implements UseCase<Usuario> {
@@ -35,7 +34,7 @@ export class AtualizarPerfilUsuarioUseCase implements UseCase<Usuario> {
       atualizaUsuarioPayload,
     );
 
-    const usuario = new UsuarioEntity({
+    const usuario = new Usuario({
       id: usuarioExists.getId(),
       email: usuarioExists.getEmail(),
       nome: usuarioExists.getNome(),

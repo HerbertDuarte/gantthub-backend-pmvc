@@ -1,7 +1,7 @@
 import { Injectable, ConflictException } from '@nestjs/common';
 import { HashUtils } from 'lib-test-herbert';
 import { UseCase } from 'src/core/interfaces/usecase.interface';
-import { UsuarioEntity } from 'src/domain/entity/usuario.entity';
+import { Usuario } from 'src/domain/entity/usuario';
 import { UsuarioTypeOrmRepository } from 'src/infrastructure/repository/usuario-typeorm.repository';
 import { AtualizaUsuarioDto } from '../../dto/usuario/atualiza-usuario.dto';
 import { CriaUsuarioDto } from '../../dto/usuario/cria-usuario.dto';
@@ -9,7 +9,7 @@ import { SenhaValidaValidator } from '../../validators/senha-valida.validator';
 import { UpdateUsuarioValidator } from '../../validators/update-usuario.validator';
 
 @Injectable()
-export class AtualizarUsuarioUseCase implements UseCase<UsuarioEntity> {
+export class AtualizarUsuarioUseCase implements UseCase<Usuario> {
   constructor(
     private readonly usuarioRepository: UsuarioTypeOrmRepository,
     private readonly updateUsuarioValidator: UpdateUsuarioValidator,
@@ -34,7 +34,7 @@ export class AtualizarUsuarioUseCase implements UseCase<UsuarioEntity> {
       atualizaUsuarioPayload,
     );
 
-    const usuario = new UsuarioEntity({
+    const usuario = new Usuario({
       id: usuarioExists.getId(),
       email: usuarioExists.getEmail(),
       nome: usuarioExists.getNome(),

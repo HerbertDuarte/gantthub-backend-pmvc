@@ -21,7 +21,7 @@ import { PaginateUsuarioDto } from '../../../domain/application/dto/usuario/pagi
 import { AtualizaPerfilUsuarioDto } from '../../../domain/application/dto/usuario/atualiza-perfil.dto';
 import { AtualizarPerfilUsuarioUseCase } from '../../../domain/application/usecases/usuario/atualiza-perfil.usecase';
 import { Request } from 'express';
-import { UsuarioEntity } from '../../../domain/entity/usuario.entity';
+import { Usuario } from '../../../domain/entity/usuario';
 import { AtualizarUsuarioUseCase } from 'src/domain/application/usecases/usuario/atualizar-usuario.usecase';
 import { BuscarPorIdUsuarioUseCase } from 'src/domain/application/usecases/usuario/buscar-por-id-usuario.usecase';
 import { BuscarUsuariosPaginacaoUseCase } from 'src/domain/application/usecases/usuario/buscar-usuarios-paginacao.usecase';
@@ -41,7 +41,7 @@ export class UsuarioController {
 
   @Post()
   @UseGuards(AuthGuard(), RolesGuard)
-  async cria(@Body() dados: CriaUsuarioDto): Promise<UsuarioEntity> {
+  async cria(@Body() dados: CriaUsuarioDto): Promise<Usuario> {
     return this.criarUsuarioUseCase.execute(dados);
   }
 
@@ -53,7 +53,7 @@ export class UsuarioController {
 
   @Get('/:id')
   @UseGuards(AuthGuard())
-  async buscaPorId(@Param('id') id: string): Promise<UsuarioEntity> {
+  async buscaPorId(@Param('id') id: string): Promise<Usuario> {
     return this.buscarPorIdUsuarioUseCase.execute(id);
   }
 

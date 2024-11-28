@@ -3,15 +3,15 @@ import { IUsuarioRepository } from '../../domain/repository/usuario.respository'
 import { PrismaService } from 'src/infrastructure/plugins/database/services/prisma.service';
 import { Injectable } from '@nestjs/common';
 import { PaginateResponse, PaginateUtil } from 'lib-test-herbert';
-import { UsuarioEntity } from '../../domain/entity/usuario.entity';
+import { Usuario } from '../../domain/entity/usuario';
 import { UsuarioMapper } from '../mapper/usuario.mapper';
 
 @Injectable()
 export class UsuarioTypeOrmRepository implements IUsuarioRepository {
   constructor(private readonly prismaService: PrismaService) {}
 
-  async cria(usuario: UsuarioEntity): Promise<UsuarioEntity> {
-    await this.prismaService.usuario.create({
+  async cria(usuario: Usuario): Promise<Usuario> {
+    await this.prismaService.usuarioPrisma.create({
       data: UsuarioMapper.toPersistence(usuario),
     });
 
@@ -19,9 +19,9 @@ export class UsuarioTypeOrmRepository implements IUsuarioRepository {
   }
   async buscaTodos(
     props: PaginateUsuarioDto,
-  ): Promise<PaginateResponse<UsuarioEntity>> {
+  ): Promise<PaginateResponse<Usuario>> {
     const { busca, pagina, itensPorPagina } = props;
-    const paginateUtil = new PaginateUtil<UsuarioEntity>(this.prismaService);
+    const paginateUtil = new PaginateUtil<Usuario>(this.prismaService);
 
     return paginateUtil.execute({
       module: 'usuario',
@@ -31,16 +31,16 @@ export class UsuarioTypeOrmRepository implements IUsuarioRepository {
     });
   }
 
-  async buscaPorEmail(email: string): Promise<UsuarioEntity> {
-    const usuario = await this.prismaService.usuario.findUnique({
+  async buscaPorEmail(email: string): Promise<Usuario> {
+    const usuario = await this.prismaService.usuarioPrisma.findUnique({
       where: {
         email,
       },
     });
     return UsuarioMapper.toDomain(usuario);
   }
-  async buscaPorId(id: string): Promise<UsuarioEntity> {
-    const usuario = await this.prismaService.usuario.findUnique({
+  async buscaPorId(id: string): Promise<Usuario> {
+    const usuario = await this.prismaService.usuarioPrisma.findUnique({
       where: {
         id,
       },
@@ -48,8 +48,8 @@ export class UsuarioTypeOrmRepository implements IUsuarioRepository {
 
     return UsuarioMapper.toDomain(usuario);
   }
-  async buscaPorLogin(login: string): Promise<UsuarioEntity> {
-    const usuario = await this.prismaService.usuario.findUnique({
+  async buscaPorLogin(login: string): Promise<Usuario> {
+    const usuario = await this.prismaService.usuarioPrisma.findUnique({
       where: {
         login: login,
       },
@@ -58,8 +58,8 @@ export class UsuarioTypeOrmRepository implements IUsuarioRepository {
     return UsuarioMapper.toDomain(usuario);
   }
 
-  async buscaPorSenha(senha: string): Promise<UsuarioEntity> {
-    const usuario = await this.prismaService.usuario.findFirst({
+  async buscaPorSenha(senha: string): Promise<Usuario> {
+    const usuario = await this.prismaService.usuarioPrisma.findFirst({
       where: {
         senha,
       },
@@ -67,8 +67,8 @@ export class UsuarioTypeOrmRepository implements IUsuarioRepository {
 
     return UsuarioMapper.toDomain(usuario);
   }
-  async atualiza(id: string, entity: UsuarioEntity): Promise<UsuarioEntity> {
-    const usuario = await this.prismaService.usuario.update({
+  async atualiza(id: string, entity: Usuario): Promise<Usuario> {
+    const usuario = await this.prismaService.usuarioPrisma.update({
       where: {
         id,
       },
@@ -79,7 +79,7 @@ export class UsuarioTypeOrmRepository implements IUsuarioRepository {
   }
 
   async deleta(id: string): Promise<void | any> {
-    await this.prismaService.usuario.delete({
+    await this.prismaService.usuarioPrisma.delete({
       where: {
         id,
       },

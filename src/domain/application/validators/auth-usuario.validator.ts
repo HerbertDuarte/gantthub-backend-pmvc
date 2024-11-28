@@ -2,9 +2,8 @@ import { Injectable, Logger } from '@nestjs/common';
 import { HashUtils } from 'lib-test-herbert';
 import { UsuarioTypeOrmRepository } from 'src/infrastructure/repository/usuario-typeorm.repository';
 import { Validator } from 'src/core/interfaces/validator.interface';
-import { Usuario } from '@prisma/client';
 import { EnumSituacaoUsuario } from 'src/domain/enum/usuario-situacao.enum';
-import { UsuarioEntity } from 'src/domain/entity/usuario.entity';
+import { Usuario } from 'src/domain/entity/usuario';
 
 type ValidateUsuarioProps = {
   login: string;
@@ -13,17 +12,14 @@ type ValidateUsuarioProps = {
 
 @Injectable()
 export class AuthUsuarioValidator
-  implements Validator<ValidateUsuarioProps, UsuarioEntity>
+  implements Validator<ValidateUsuarioProps, Usuario>
 {
   constructor(
     private readonly logger: Logger,
     private readonly usuarioRepository: UsuarioTypeOrmRepository,
   ) {}
 
-  async validate({
-    login,
-    senha,
-  }: ValidateUsuarioProps): Promise<UsuarioEntity> {
+  async validate({ login, senha }: ValidateUsuarioProps): Promise<Usuario> {
     const usuario = await this.usuarioRepository.buscaPorLogin(login);
     if (usuario) {
       const situacao = usuario.getSituacao();

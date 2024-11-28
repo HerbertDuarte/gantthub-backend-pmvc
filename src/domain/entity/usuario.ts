@@ -20,7 +20,7 @@ type UsuarioProps = {
   deletedAt?: Date;
 };
 
-export class UsuarioEntity {
+export class Usuario {
   private id: string;
   private nome: string;
   private email: string;

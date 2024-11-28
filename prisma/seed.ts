@@ -4,7 +4,7 @@ import { Logger } from '@nestjs/common';
 const prisma = new PrismaClient();
 const logger = new Logger('Seed');
 async function main() {
-  await prisma.usuario.create({
+  await prisma.usuarioPrisma.create({
     data: {
       nome: 'Admin',
       email: 'admin@mail.com',

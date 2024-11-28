@@ -7,7 +7,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Usuario {
+model UsuarioPrisma {
   id        String   @id @default(uuid())
   nome      String
   email     String   @unique
@@ -17,37 +17,37 @@ model Usuario {
   createdAt DateTime @default(now()) @db.Timestamptz(3)
   updatedAt DateTime @updatedAt @db.Timestamptz(3)
 
-  UsuarioTarefa  UsuarioTarefa[]
-  UsuarioProjeto UsuarioProjeto[]
+  UsuarioTarefa  UsuarioTarefaPrisma[]
+  UsuarioProjeto UsuarioProjetoPrisma[]
 
   @@map("usuarios")
 }
 
-model Projeto {
-  id        String  @id @default(uuid())
+model ProjetoPrisma {
+  id        String        @id @default(uuid())
   nome      String
   descricao String
-  marcos    Marco[]
+  marcos    MarcoPrisma[]
 
-  createdAt      DateTime         @default(now()) @db.Timestamptz(3)
-  updatedAt      DateTime         @updatedAt @db.Timestamptz(3)
-  UsuarioProjeto UsuarioProjeto[]
+  createdAt      DateTime               @default(now()) @db.Timestamptz(3)
+  updatedAt      DateTime               @updatedAt @db.Timestamptz(3)
+  UsuarioProjeto UsuarioProjetoPrisma[]
 
   @@map("projetos")
 }
 
-model Marco {
-  id      String   @id @default(uuid())
+model MarcoPrisma {
+  id      String         @id @default(uuid())
   nome    String
-  tarefas Tarefa[]
+  tarefas TarefaPrisma[]
 
-  projeto   Projeto @relation(fields: [projetoId], references: [id])
+  projeto   ProjetoPrisma @relation(fields: [projetoId], references: [id])
   projetoId String
 
   @@map("marcos")
 }
 
-model Tarefa {
+model TarefaPrisma {
   id         String   @id @default(uuid())
   nome       String
   descricao  String
@@ -58,17 +58,17 @@ model Tarefa {
   createdAt DateTime @default(now()) @db.Timestamptz(3)
   updatedAt DateTime @updatedAt @db.Timestamptz(3)
 
-  marco   Marco  @relation(fields: [marcoId], references: [id])
+  marco   MarcoPrisma @relation(fields: [marcoId], references: [id])
   marcoId String
 
-  UsuarioTarefa UsuarioTarefa[]
+  UsuarioTarefa UsuarioTarefaPrisma[]
 
   @@map("tarefas")
 }
 
-model UsuarioTarefa {
-  usuario   Usuario @relation(fields: [usuarioId], references: [id])
-  tarefa    Tarefa  @relation(fields: [tarefaId], references: [id])
+model UsuarioTarefaPrisma {
+  usuario   UsuarioPrisma @relation(fields: [usuarioId], references: [id])
+  tarefa    TarefaPrisma  @relation(fields: [tarefaId], references: [id])
   usuarioId String
   tarefaId  String
 
@@ -76,9 +76,9 @@ model UsuarioTarefa {
   @@map("usuarioTarefa")
 }
 
-model UsuarioProjeto {
-  usuario     Usuario @relation(fields: [usuarioId], references: [id])
-  projeto     Projeto @relation(fields: [projetoId], references: [id])
+model UsuarioProjetoPrisma {
+  usuario     UsuarioPrisma @relation(fields: [usuarioId], references: [id])
+  projeto     ProjetoPrisma @relation(fields: [projetoId], references: [id])
   tipoVinculo Int
   usuarioId   String
   projetoId   String
