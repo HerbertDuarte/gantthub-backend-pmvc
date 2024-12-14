@@ -15,7 +15,6 @@ model UsuarioPrisma {
   login     String   @unique
   senha     String
   createdAt DateTime @default(now()) @db.Timestamptz(3)
-  updatedAt DateTime @updatedAt @db.Timestamptz(3)
 
   UsuarioTarefa  UsuarioTarefaPrisma[]
   UsuarioProjeto UsuarioProjetoPrisma[]
@@ -29,9 +28,8 @@ model ProjetoPrisma {
   descricao String
   marcos    MarcoPrisma[]
 
-  createdAt      DateTime               @default(now()) @db.Timestamptz(3)
-  updatedAt      DateTime               @updatedAt @db.Timestamptz(3)
-  UsuarioProjeto UsuarioProjetoPrisma[]
+  createdAt        DateTime               @default(now()) @db.Timestamptz(3)
+  usuariosProjetos UsuarioProjetoPrisma[]
 
   @@map("projetos")
 }
@@ -56,14 +54,39 @@ model TarefaPrisma {
   status     Int
 
   createdAt DateTime @default(now()) @db.Timestamptz(3)
-  updatedAt DateTime @updatedAt @db.Timestamptz(3)
 
   marco   MarcoPrisma @relation(fields: [marcoId], references: [id])
   marcoId String
 
-  UsuarioTarefa UsuarioTarefaPrisma[]
+  usuariosTarefas UsuarioTarefaPrisma[]
+  checkList       CheckListPrisma[]
 
   @@map("tarefas")
+}
+
+model CheckListPrisma {
+  id        String   @id @default(uuid())
+  nome      String
+  createdAt DateTime @default(now()) @db.Timestamptz(3)
+
+  tarefa     TarefaPrisma      @relation(fields: [tarefaId], references: [id])
+  tarefaId   String
+  checkItems CheckItemPrisma[]
+
+  @@map("checkList")
+}
+
+model CheckItemPrisma {
+  id        String   @default(uuid())
+  nome      String
+  checked   Boolean
+  createdAt DateTime @default(now()) @db.Timestamptz(3)
+
+  checkList   CheckListPrisma @relation(fields: [checkListId], references: [id])
+  checkListId String
+
+  @@id([checkListId, id])
+  @@map("checkItem")
 }
 
 model UsuarioTarefaPrisma {

@@ -1,5 +1,5 @@
 import { ConflictException, Injectable } from '@nestjs/common';
-import { UsuarioTypeOrmRepository } from '../../../../infrastructure/repository/usuario-typeorm.repository';
+import { UsuarioPrismaRepository } from '../../../../infrastructure/repository/usuario-prisma.repository';
 import { UseCase } from 'src/core/interfaces/usecase.interface';
 import { UpdateUsuarioValidator } from '../../validators/update-usuario.validator';
 import { AtualizaPerfilUsuarioDto } from '../../dto/usuario/atualiza-perfil.dto';
@@ -11,7 +11,7 @@ import { Usuario } from '../../../entity/usuario';
 @Injectable()
 export class AtualizarPerfilUsuarioUseCase implements UseCase<Usuario> {
   constructor(
-    private readonly usuarioRepository: UsuarioTypeOrmRepository,
+    private readonly usuarioRepository: UsuarioPrismaRepository,
     private readonly updateUsuarioValidator: UpdateUsuarioValidator,
     private readonly senhaValidaValidator: SenhaValidaValidator,
   ) {}
@@ -40,8 +40,6 @@ export class AtualizarPerfilUsuarioUseCase implements UseCase<Usuario> {
       nome: usuarioExists.getNome(),
       login: usuarioExists.getLogin(),
       createdAt: usuarioExists.getCreatedAt(),
-      deletedAt: usuarioExists.getDeletedAt(),
-      updatedAt: new Date(),
       senha: usuarioExists.getSenha(),
       situacao: usuarioExists.getSituacao(),
       ...atualizaUsuarioPayload,

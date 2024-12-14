@@ -2,7 +2,7 @@ import { Injectable, ConflictException } from '@nestjs/common';
 import { HashUtils } from 'lib-test-herbert';
 import { UseCase } from 'src/core/interfaces/usecase.interface';
 import { Usuario } from 'src/domain/entity/usuario';
-import { UsuarioTypeOrmRepository } from 'src/infrastructure/repository/usuario-typeorm.repository';
+import { UsuarioPrismaRepository } from 'src/infrastructure/repository/usuario-prisma.repository';
 import { AtualizaUsuarioDto } from '../../dto/usuario/atualiza-usuario.dto';
 import { CriaUsuarioDto } from '../../dto/usuario/cria-usuario.dto';
 import { SenhaValidaValidator } from '../../validators/senha-valida.validator';
@@ -11,7 +11,7 @@ import { UpdateUsuarioValidator } from '../../validators/update-usuario.validato
 @Injectable()
 export class AtualizarUsuarioUseCase implements UseCase<Usuario> {
   constructor(
-    private readonly usuarioRepository: UsuarioTypeOrmRepository,
+    private readonly usuarioRepository: UsuarioPrismaRepository,
     private readonly updateUsuarioValidator: UpdateUsuarioValidator,
     private readonly senhaValidaValidator: SenhaValidaValidator,
   ) {}
@@ -40,8 +40,6 @@ export class AtualizarUsuarioUseCase implements UseCase<Usuario> {
       nome: usuarioExists.getNome(),
       login: usuarioExists.getLogin(),
       createdAt: usuarioExists.getCreatedAt(),
-      deletedAt: usuarioExists.getDeletedAt(),
-      updatedAt: new Date(),
       senha: usuarioExists.getSenha(),
       situacao: usuarioExists.getSituacao(),
       ...atualizaUsuarioPayload,

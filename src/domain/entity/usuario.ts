@@ -16,8 +16,6 @@ type UsuarioProps = {
   login: string;
   senha: string;
   createdAt?: Date;
-  updatedAt?: Date;
-  deletedAt?: Date;
 };
 
 export class Usuario {
@@ -28,10 +26,9 @@ export class Usuario {
   private login: string;
   private senha: string;
   private createdAt: Date;
-  private updatedAt: Date;
-  private deletedAt: Date;
 
   constructor(props: UsuarioProps) {
+    this.validate(props);
     this.id = props.id ?? randomUUID();
     this.nome = props.nome;
     this.email = props.email;
@@ -39,9 +36,6 @@ export class Usuario {
     this.login = props.login;
     this.setSenha(props.senha);
     this.createdAt = props.createdAt ?? new Date();
-    this.updatedAt = props.updatedAt ?? null;
-    this.deletedAt = props.deletedAt ?? null;
-    this.validate();
   }
 
   private setSenha(senha: string) {
@@ -52,10 +46,10 @@ export class Usuario {
     this.senha = hashSync(senha);
   }
 
-  private validate() {
-    this.validateEmail(this.email);
-    this.validateLogin(this.login);
-    this.validatePassword(this.senha);
+  private validate(props: UsuarioProps) {
+    this.validateEmail(props.email);
+    this.validateLogin(props.login);
+    this.validatePassword(props.senha);
   }
 
   private validatePassword(senha: string) {
@@ -103,6 +97,4 @@ export class Usuario {
   public getLogin = () => this.login;
   public getSenha = () => this.senha;
   public getCreatedAt = () => this.createdAt;
-  public getUpdatedAt = () => this.updatedAt;
-  public getDeletedAt = () => this.deletedAt;
 }

@@ -1,11 +1,11 @@
 import { Validator } from 'src/core/interfaces/validator.interface';
-import { UsuarioTypeOrmRepository } from '../../../infrastructure/repository/usuario-typeorm.repository';
+import { UsuarioPrismaRepository } from '../../../infrastructure/repository/usuario-prisma.repository';
 import { ConflictException, Injectable, Logger } from '@nestjs/common';
 
 @Injectable()
 export class EmailJaCadastradoValidator implements Validator<string, void> {
   private readonly logger = new Logger(EmailJaCadastradoValidator.name);
-  constructor(private usuarioRepository: UsuarioTypeOrmRepository) {}
+  constructor(private usuarioRepository: UsuarioPrismaRepository) {}
   async validate(email: string): Promise<void> {
     const emailExiste = await this.usuarioRepository.buscaPorEmail(email);
 

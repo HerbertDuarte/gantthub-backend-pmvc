@@ -15,7 +15,6 @@ export class UsuarioMapper {
       login: usuarioPrisma.login,
       senha: usuarioPrisma.senha,
       createdAt: usuarioPrisma.createdAt,
-      updatedAt: usuarioPrisma.updatedAt,
     });
   }
 
@@ -32,7 +31,6 @@ export class UsuarioMapper {
       login: entity.getLogin(),
       senha: entity.getSenha(),
       createdAt: entity.getCreatedAt(),
-      updatedAt: entity.getUpdatedAt(),
     } as UsuarioPrisma;
   }
 }

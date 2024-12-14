@@ -1,13 +1,13 @@
 import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { UseCase } from 'src/core/interfaces/usecase.interface';
 import { Usuario } from 'src/domain/entity/usuario';
-import { UsuarioTypeOrmRepository } from 'src/infrastructure/repository/usuario-typeorm.repository';
+import { UsuarioPrismaRepository } from 'src/infrastructure/repository/usuario-prisma.repository';
 
 @Injectable()
 export class BuscarPorIdUsuarioUseCase implements UseCase<Usuario> {
   private readonly logger = new Logger(BuscarPorIdUsuarioUseCase.name);
 
-  constructor(private readonly usuarioRepository: UsuarioTypeOrmRepository) {}
+  constructor(private readonly usuarioRepository: UsuarioPrismaRepository) {}
 
   async execute(id: string): Promise<Usuario> {
     const usuario = await this.usuarioRepository.buscaPorId(id);

@@ -7,7 +7,7 @@ import { Usuario } from '../../domain/entity/usuario';
 import { UsuarioMapper } from '../mapper/usuario.mapper';
 
 @Injectable()
-export class UsuarioTypeOrmRepository implements IUsuarioRepository {
+export class UsuarioPrismaRepository implements IUsuarioRepository {
   constructor(private readonly prismaService: PrismaService) {}
 
   async cria(usuario: Usuario): Promise<Usuario> {
@@ -24,7 +24,7 @@ export class UsuarioTypeOrmRepository implements IUsuarioRepository {
     const paginateUtil = new PaginateUtil<Usuario>(this.prismaService);
 
     return paginateUtil.execute({
-      module: 'usuario',
+      module: 'usuarioPrisma',
       busca,
       pagina,
       itensPorPagina,

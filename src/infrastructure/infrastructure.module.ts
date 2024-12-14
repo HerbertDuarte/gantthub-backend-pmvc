@@ -14,11 +14,12 @@ import { EmailJaCadastradoValidator } from 'src/domain/application/validators/em
 import { LoginJaCadastradoValidator } from 'src/domain/application/validators/login-ja-cadastrado.validator';
 import { SenhaValidaValidator } from 'src/domain/application/validators/senha-valida.validator';
 import { UpdateUsuarioValidator } from 'src/domain/application/validators/update-usuario.validator';
-import { UsuarioTypeOrmRepository } from './repository/usuario-typeorm.repository';
+import { UsuarioPrismaRepository } from './repository/usuario-prisma.repository';
 import { DatabaseModule } from './plugins/database/database.module';
 import { AtualizarUsuarioUseCase } from 'src/domain/application/usecases/usuario/atualizar-usuario.usecase';
 import { BuscarPorIdUsuarioUseCase } from 'src/domain/application/usecases/usuario/buscar-por-id-usuario.usecase';
 import { BuscarUsuariosPaginacaoUseCase } from 'src/domain/application/usecases/usuario/buscar-usuarios-paginacao.usecase';
+import { UsuarioController } from './adapter/controller/usuario.controller';
 
 const usecases: Provider[] = [
   LoginUseCase,
@@ -30,7 +31,7 @@ const usecases: Provider[] = [
   AtualizarPerfilUsuarioUseCase,
 ];
 
-const repositories: Provider[] = [UsuarioTypeOrmRepository];
+const repositories: Provider[] = [UsuarioPrismaRepository];
 const validators: Provider[] = [
   EmailJaCadastradoValidator,
   LoginJaCadastradoValidator,
@@ -62,8 +63,8 @@ const providers: Provider[] = [
       inject: [ConfigService],
     }),
   ],
-  controllers: [AuthController],
+  controllers: [AuthController, UsuarioController],
   providers,
-  exports: [...providers],
+  exports: providers,
 })
 export class InfrastructureModule {}
