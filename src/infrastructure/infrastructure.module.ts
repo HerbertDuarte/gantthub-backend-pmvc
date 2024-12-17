@@ -20,6 +20,8 @@ import { AtualizarUsuarioUseCase } from 'src/domain/application/usecases/usuario
 import { BuscarPorIdUsuarioUseCase } from 'src/domain/application/usecases/usuario/buscar-por-id-usuario.usecase';
 import { BuscarUsuariosPaginacaoUseCase } from 'src/domain/application/usecases/usuario/buscar-usuarios-paginacao.usecase';
 import { UsuarioController } from './adapter/controller/usuario.controller';
+import { ProjetoController } from './adapter/controller/projeto.controller.';
+import { ProjetoPrismaRepository } from './repository/projeto-prisma.repository';
 
 const usecases: Provider[] = [
   LoginUseCase,
@@ -31,7 +33,10 @@ const usecases: Provider[] = [
   AtualizarPerfilUsuarioUseCase,
 ];
 
-const repositories: Provider[] = [UsuarioPrismaRepository];
+const repositories: Provider[] = [
+  UsuarioPrismaRepository,
+  ProjetoPrismaRepository,
+];
 const validators: Provider[] = [
   EmailJaCadastradoValidator,
   LoginJaCadastradoValidator,
@@ -63,7 +68,7 @@ const providers: Provider[] = [
       inject: [ConfigService],
     }),
   ],
-  controllers: [AuthController, UsuarioController],
+  controllers: [AuthController, UsuarioController, ProjetoController],
   providers,
   exports: providers,
 })
