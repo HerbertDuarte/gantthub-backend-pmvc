@@ -16,6 +16,11 @@ export class ProjetoPrismaRepository {
           include: {
             tarefas: {
               include: {
+                usuariosTarefas: {
+                  include: {
+                    usuario: true,
+                  },
+                },
                 checkList: {
                   include: {
                     checkItems: true,
