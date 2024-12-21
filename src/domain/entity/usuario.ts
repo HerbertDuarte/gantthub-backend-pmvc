@@ -16,6 +16,7 @@ type UsuarioProps = {
   login: string;
   senha: string;
   createdAt?: Date;
+  imageUrl?: string;
 };
 
 export class Usuario {
@@ -25,10 +26,12 @@ export class Usuario {
   private situacao: EnumSituacaoUsuario;
   private login: string;
   private senha: string;
+  private imageUrl: string;
   private createdAt: Date;
 
   constructor(props: UsuarioProps) {
     this.validate(props);
+    this.imageUrl = props.imageUrl ?? null;
     this.id = props.id ?? randomUUID();
     this.nome = props.nome;
     this.email = props.email;

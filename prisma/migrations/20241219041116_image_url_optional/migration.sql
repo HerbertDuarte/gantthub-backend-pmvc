@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "usuarios" ALTER COLUMN "imageUrl" DROP NOT NULL,
+ALTER COLUMN "imageUrl" DROP DEFAULT;

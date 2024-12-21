@@ -14,6 +14,7 @@ model UsuarioPrisma {
   situacao  Int      @default(1)
   login     String   @unique
   senha     String
+  imageUrl  String?
   createdAt DateTime @default(now()) @db.Timestamptz(3)
 
   UsuarioTarefa  UsuarioTarefaPrisma[]
