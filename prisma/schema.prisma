@@ -60,7 +60,7 @@ model TarefaPrisma {
   marcoId String
 
   usuariosTarefas UsuarioTarefaPrisma[]
-  checkList       CheckListPrisma[]
+  checkLists      CheckListPrisma[]
 
   @@map("tarefas")
 }

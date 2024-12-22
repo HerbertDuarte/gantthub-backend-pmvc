@@ -21,7 +21,7 @@ export class ProjetoPrismaRepository {
                     usuario: true,
                   },
                 },
-                checkList: {
+                checkLists: {
                   include: {
                     checkItems: true,
                   },
