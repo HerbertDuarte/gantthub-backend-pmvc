@@ -9,7 +9,7 @@ export class DeletarUsuarioUseCase implements UseCase<Usuario> {
   constructor(private readonly usuarioRepository: UsuarioPrismaRepository) {}
 
   async execute(id: string): Promise<void> {
-    const usuarioExists = await this.usuarioRepository.buscaPorId(id);
+    const usuarioExists = await this.usuarioRepository.findById(id);
 
     if (!usuarioExists) {
       this.logger.error('usuario não existe!');

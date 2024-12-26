@@ -7,7 +7,7 @@ export class EmailJaCadastradoValidator implements Validator<string, void> {
   private readonly logger = new Logger(EmailJaCadastradoValidator.name);
   constructor(private usuarioRepository: UsuarioPrismaRepository) {}
   async validate(email: string): Promise<void> {
-    const emailExiste = await this.usuarioRepository.buscaPorEmail(email);
+    const emailExiste = await this.usuarioRepository.findByEmail(email);
 
     if (emailExiste) {
       this.logger.error('Esse e-mail já existe na base de dados');

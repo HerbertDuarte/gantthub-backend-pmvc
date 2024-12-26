@@ -8,7 +8,7 @@ export class LoginJaCadastradoValidator implements Validator<string, void> {
   constructor(private usuarioRepository: UsuarioPrismaRepository) {}
 
   async validate(login: string): Promise<void> {
-    const loginExiste = await this.usuarioRepository.buscaPorLogin(login);
+    const loginExiste = await this.usuarioRepository.findByLogin(login);
     if (loginExiste) {
       this.logger.error('Esse login já existe na base de dados');
       throw new ConflictException('Esse login já existe na base de dados');

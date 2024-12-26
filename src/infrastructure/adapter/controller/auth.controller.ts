@@ -5,7 +5,7 @@ import { AutenticaUsuarioDto } from '../../../domain/application/dto/auth/autent
 import { LocalAuthGuard } from '../guard/local-auth.guard';
 import { Request } from 'express';
 
-@Controller('')
+@Controller('auth')
 @ApiTags('Autenticação')
 export class AuthController {
   constructor(
@@ -14,13 +14,13 @@ export class AuthController {
   ) {}
 
   @UseGuards(LocalAuthGuard)
-  @Post('auth/login')
+  @Post('login')
   @ApiBody({
     description: 'Dados para login',
     type: AutenticaUsuarioDto,
   })
   async login(@Req() req: Request) {
     this.logger.debug('Login realizado no sistema!');
-    return this.loginUseCase.execute(req.user);
+    return this.loginUseCase.execute(req);
   }
 }

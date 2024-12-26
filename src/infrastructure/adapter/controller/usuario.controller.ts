@@ -13,7 +13,6 @@ import {
 import { AuthGuard } from '@nestjs/passport';
 import { AtualizaUsuarioDto } from '../../../domain/application/dto/usuario/atualiza-usuario.dto';
 import { CriaUsuarioDto } from '../../../domain/application/dto/usuario/cria-usuario.dto';
-import { RolesGuard } from 'src/infrastructure/adapter/guard/roles.guard';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { CriarUsuarioUseCase } from '../../../domain/application/usecases/usuario/criar-usuario.usecase';
 import { DeletarUsuarioUseCase } from '../../../domain/application/usecases/usuario/deletar-usuario.usecase';
@@ -25,6 +24,7 @@ import { Usuario } from '../../../domain/entity/usuario';
 import { AtualizarUsuarioUseCase } from 'src/domain/application/usecases/usuario/atualizar-usuario.usecase';
 import { BuscarPorIdUsuarioUseCase } from 'src/domain/application/usecases/usuario/buscar-por-id-usuario.usecase';
 import { BuscarUsuariosPaginacaoUseCase } from 'src/domain/application/usecases/usuario/buscar-usuarios-paginacao.usecase';
+import { JwtAuthGuard } from '../guard/jwt-auth.guard';
 
 @ApiBearerAuth()
 @Controller('usuarios')
@@ -40,45 +40,30 @@ export class UsuarioController {
   ) {}
 
   @Post()
-  @UseGuards(AuthGuard(), RolesGuard)
+  @UseGuards(JwtAuthGuard)
   async cria(@Body() dados: CriaUsuarioDto): Promise<Usuario> {
     return this.criarUsuarioUseCase.execute(dados);
   }
 
   @Get()
-  @UseGuards(AuthGuard())
-  async buscaTodos(@Query() queryPrams?: PaginateUsuarioDto) {
+  @UseGuards(JwtAuthGuard)
+  async findAll(@Query() queryPrams?: PaginateUsuarioDto) {
     return this.buscarUsuariosPaginacaoUseCase.execute(queryPrams);
   }
 
   @Get('/:id')
-  @UseGuards(AuthGuard())
-  async buscaPorId(@Param('id') id: string): Promise<Usuario> {
+  @UseGuards(JwtAuthGuard)
+  async findById(@Param('id') id: string): Promise<Usuario> {
     return this.buscarPorIdUsuarioUseCase.execute(id);
   }
 
   @Put('/perfil/')
-  @UseGuards(AuthGuard())
+  @UseGuards(JwtAuthGuard)
   async atualizaPerfil(
     @Body() data: AtualizaPerfilUsuarioDto,
     @Req() req: Request,
   ): Promise<void> {
-    const userId = req.user.id;
+    const userId = req.user.getId();
     return this.atualizaPerfilUsuarioUseCase.execute(userId, data);
-  }
-
-  @Put('/:id')
-  @UseGuards(AuthGuard())
-  async atualiza(
-    @Param('id') id: string,
-    @Body() data: AtualizaUsuarioDto,
-  ): Promise<void> {
-    return this.atualizarUsuarioUseCase.execute(id, data);
-  }
-
-  @Delete('/:id')
-  @UseGuards(AuthGuard(), RolesGuard)
-  async deleta(@Param('id') id: string): Promise<void> {
-    return this.deletarUsuarioUseCase.execute(id);
   }
 }

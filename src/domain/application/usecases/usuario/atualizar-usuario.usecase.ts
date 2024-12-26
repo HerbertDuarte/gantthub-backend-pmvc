@@ -17,7 +17,7 @@ export class AtualizarUsuarioUseCase implements UseCase<Usuario> {
   ) {}
 
   async execute(id: string, data: AtualizaUsuarioDto): Promise<void> {
-    const usuarioExists = await this.usuarioRepository.buscaPorId(id);
+    const usuarioExists = await this.usuarioRepository.findById(id);
     if (!usuarioExists) throw new ConflictException('Usuário não encontrado.');
 
     const atualizaUsuarioPayload: Partial<CriaUsuarioDto> = data;

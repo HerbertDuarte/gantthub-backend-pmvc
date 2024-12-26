@@ -1,4 +1,7 @@
 export interface UsuarioJWTPayload {
-  login: string;
-  sub: string;
+  email: string;
+  id: string;
+  iat: number;
+  exp: number;
+  refreshToken: string;
 }

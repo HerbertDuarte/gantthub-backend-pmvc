@@ -1,18 +1,17 @@
 import { Logger } from '@nestjs/common';
+import { HttpsOptions } from '@nestjs/common/interfaces/external/https-options.interface';
 import { ConfigService } from '@nestjs/config';
 import { NestExpressApplication } from '@nestjs/platform-express';
-import { HttpOptions } from '../ssl/ssl-config';
 import { Environment } from 'env/environment.dto';
 
 export function bootstrapLogger(
   app: NestExpressApplication,
-  httpsOptions: HttpOptions,
+  httpsOptions?: HttpsOptions,
 ) {
   const config = app.get(ConfigService<Environment, true>);
   const HTTP_PORT = config.get<string>('HTTP_PORT');
   const APP_HOSTNAME = config.get<string>('APP_HOSTNAME');
   const logger = new Logger('Bootstrap');
-  // elasticConfig(app);
   const address =
     'http' +
     (httpsOptions ? 's' : '') +

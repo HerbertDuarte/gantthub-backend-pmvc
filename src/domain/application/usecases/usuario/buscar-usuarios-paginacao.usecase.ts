@@ -13,6 +13,6 @@ export class BuscarUsuariosPaginacaoUseCase implements UseCase<Usuario> {
     queryPrams: PaginateUsuarioDto,
   ): Promise<PaginateResponse<Usuario>> {
     console.log('queryPrams', queryPrams);
-    return this.usuarioRepository.buscaTodos(queryPrams);
+    return this.usuarioRepository.findAll(queryPrams);
   }
 }

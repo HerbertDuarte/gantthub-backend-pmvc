@@ -2,21 +2,31 @@ import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UseCase } from 'src/core/interfaces/usecase.interface';
 import { LoginResponseDto } from '../../dto/auth/login-response.dto';
-import { UsuarioDecodedDto } from '../../dto/auth/usuario-decoded.dto';
+import { randomUUID } from 'crypto';
+import { Request } from 'express';
 
 @Injectable()
 export class LoginUseCase implements UseCase<LoginResponseDto> {
   constructor(private readonly jwtService: JwtService) {}
 
-  async execute(usuario: UsuarioDecodedDto): Promise<LoginResponseDto> {
+  async execute(request: Request): Promise<LoginResponseDto> {
+    const usuario = request.user;
     const payload = {
-      login: usuario.login,
-      sub: usuario.id,
+      email: usuario.getEmail(),
+      id: usuario.getId(),
+      refreshToken: randomUUID(),
     };
-    const usuarioId = usuario.id;
+    const usuarioId = usuario.getId();
+    const accessToken = this.jwtService.sign(payload, {
+      expiresIn: '1h',
+      algorithm: 'HS256',
+      privateKey: process.env.JWT_SECRET,
+    });
+
+    request.headers.authorization = 'Bearer ' + accessToken;
 
     return {
-      access_token: this.jwtService.sign(payload),
+      access_token: accessToken,
       usuarioId,
     };
   }

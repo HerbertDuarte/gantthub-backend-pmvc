@@ -1,11 +1,11 @@
-import { UsuarioDecodedDto } from 'src/domain/application/dto/auth/usuario-decoded.dto';
+import { Usuario } from 'src/domain/entity/usuario';
 
 declare module 'express' {
   export interface Request {
-    user: UsuarioDecodedDto;
+    user: Usuario;
   }
 
   export interface Response {
-    user: UsuarioDecodedDto;
+    user: Usuario;
   }
 }

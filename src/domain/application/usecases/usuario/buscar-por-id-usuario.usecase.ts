@@ -10,7 +10,7 @@ export class BuscarPorIdUsuarioUseCase implements UseCase<Usuario> {
   constructor(private readonly usuarioRepository: UsuarioPrismaRepository) {}
 
   async execute(id: string): Promise<Usuario> {
-    const usuario = await this.usuarioRepository.buscaPorId(id);
+    const usuario = await this.usuarioRepository.findById(id);
 
     if (!usuario) {
       this.logger.error('Usuário não encontrado!');

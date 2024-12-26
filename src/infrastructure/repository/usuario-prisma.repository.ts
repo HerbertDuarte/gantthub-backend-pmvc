@@ -5,6 +5,7 @@ import { Injectable } from '@nestjs/common';
 import { PaginateResponse, PaginateUtil } from 'lib-test-herbert';
 import { Usuario } from '../../domain/entity/usuario';
 import { UsuarioMapper } from '../mapper/usuario.mapper';
+import { randomUUID } from 'crypto';
 
 @Injectable()
 export class UsuarioPrismaRepository implements IUsuarioRepository {
@@ -17,9 +18,7 @@ export class UsuarioPrismaRepository implements IUsuarioRepository {
 
     return usuario;
   }
-  async buscaTodos(
-    props: PaginateUsuarioDto,
-  ): Promise<PaginateResponse<Usuario>> {
+  async findAll(props: PaginateUsuarioDto): Promise<PaginateResponse<Usuario>> {
     const { busca, pagina, itensPorPagina } = props;
     const paginateUtil = new PaginateUtil<Usuario>(this.prismaService);
 
@@ -31,7 +30,7 @@ export class UsuarioPrismaRepository implements IUsuarioRepository {
     });
   }
 
-  async buscaPorEmail(email: string): Promise<Usuario> {
+  async findByEmail(email: string): Promise<Usuario> {
     const usuario = await this.prismaService.usuarioPrisma.findUnique({
       where: {
         email,
@@ -39,7 +38,7 @@ export class UsuarioPrismaRepository implements IUsuarioRepository {
     });
     return UsuarioMapper.toDomain(usuario);
   }
-  async buscaPorId(id: string): Promise<Usuario> {
+  async findById(id: string): Promise<Usuario> {
     const usuario = await this.prismaService.usuarioPrisma.findUnique({
       where: {
         id,
@@ -48,7 +47,7 @@ export class UsuarioPrismaRepository implements IUsuarioRepository {
 
     return UsuarioMapper.toDomain(usuario);
   }
-  async buscaPorLogin(login: string): Promise<Usuario> {
+  async findByLogin(login: string): Promise<Usuario> {
     const usuario = await this.prismaService.usuarioPrisma.findUnique({
       where: {
         login: login,
@@ -58,7 +57,7 @@ export class UsuarioPrismaRepository implements IUsuarioRepository {
     return UsuarioMapper.toDomain(usuario);
   }
 
-  async buscaPorSenha(senha: string): Promise<Usuario> {
+  async findBySenha(senha: string): Promise<Usuario> {
     const usuario = await this.prismaService.usuarioPrisma.findFirst({
       where: {
         senha,
@@ -67,6 +66,35 @@ export class UsuarioPrismaRepository implements IUsuarioRepository {
 
     return UsuarioMapper.toDomain(usuario);
   }
+
+  async findByRefreshToken(refreshToken: string): Promise<Usuario> {
+    const usuario = await this.prismaService.usuarioPrisma.findFirst({
+      where: {
+        refreshToken,
+      },
+    });
+
+    return UsuarioMapper.toDomain(usuario);
+  }
+
+  async updateRefreshToken(usuarioId: string): Promise<Usuario> {
+    const usuario = await this.findById(usuarioId);
+    if (!usuario) return null;
+
+    const newToken = randomUUID();
+
+    const usuarioPrisma = await this.prismaService.usuarioPrisma.update({
+      where: {
+        id: usuarioId,
+      },
+      data: {
+        refreshToken: newToken,
+      },
+    });
+
+    return UsuarioMapper.toDomain(usuarioPrisma);
+  }
+
   async atualiza(id: string, entity: Usuario): Promise<Usuario> {
     const usuario = await this.prismaService.usuarioPrisma.update({
       where: {

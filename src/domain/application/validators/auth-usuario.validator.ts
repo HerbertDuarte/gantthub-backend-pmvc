@@ -6,7 +6,7 @@ import { EnumSituacaoUsuario } from 'src/domain/enum/usuario-situacao.enum';
 import { Usuario } from 'src/domain/entity/usuario';
 
 type ValidateUsuarioProps = {
-  login: string;
+  email: string;
   senha: string;
 };
 
@@ -19,17 +19,18 @@ export class AuthUsuarioValidator
     private readonly usuarioRepository: UsuarioPrismaRepository,
   ) {}
 
-  async validate({ login, senha }: ValidateUsuarioProps): Promise<Usuario> {
-    const usuario = await this.usuarioRepository.buscaPorLogin(login);
+  async validate({ email, senha }: ValidateUsuarioProps): Promise<Usuario> {
+    const usuario = await this.usuarioRepository.findByEmail(email);
     if (usuario) {
       const situacao = usuario.getSituacao();
       const matched = await HashUtils.comparaString(senha, usuario.getSenha());
-      if (matched && situacao === EnumSituacaoUsuario.ATIVO) {
+      const canContinue = situacao === EnumSituacaoUsuario.ATIVO && matched;
+
+      if (canContinue) {
         return usuario;
-      } else {
-        this.logger.error('Senha inválida ou usuário inativo');
-        return null;
       }
+      this.logger.error('Senha inválida ou usuário inativo');
+      return null;
     }
     this.logger.error('Usuário inválido!');
     return null;

@@ -3,15 +3,10 @@ import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { swaggerConfig } from './infrastructure/plugins/swagger/swagger.config';
-import { sslConfig } from './infrastructure/plugins/ssl/ssl-config';
 import { bootstrapLogger } from './infrastructure/plugins/system-logs/bootstrap-logger';
 
 async function bootstrap() {
-  const httpsOptions = sslConfig();
-
-  const app = await NestFactory.create<NestExpressApplication>(AppModule, {
-    httpsOptions,
-  });
+  const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
   app.useGlobalPipes(
     new ValidationPipe({
@@ -24,7 +19,7 @@ async function bootstrap() {
 
   swaggerConfig(app);
   app.enableShutdownHooks();
-  bootstrapLogger(app, httpsOptions);
+  bootstrapLogger(app);
 }
 
 bootstrap();

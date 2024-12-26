@@ -8,14 +8,15 @@ datasource db {
 }
 
 model UsuarioPrisma {
-  id        String   @id @default(uuid())
-  nome      String
-  email     String   @unique
-  situacao  Int      @default(1)
-  login     String   @unique
-  senha     String
-  imageUrl  String?
-  createdAt DateTime @default(now()) @db.Timestamptz(3)
+  id           String   @id @default(uuid())
+  nome         String
+  email        String   @unique
+  situacao     Int      @default(1)
+  login        String   @unique
+  refreshToken String?
+  senha        String
+  imageUrl     String?
+  createdAt    DateTime @default(now()) @db.Timestamptz(3)
 
   UsuarioTarefa  UsuarioTarefaPrisma[]
   UsuarioProjeto UsuarioProjetoPrisma[]

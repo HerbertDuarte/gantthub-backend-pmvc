@@ -1,13 +1,18 @@
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { PassportStrategy } from '@nestjs/passport';
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { UsuarioDecodedDto } from '../../../domain/application/dto/auth/usuario-decoded.dto';
 import { UsuarioJWTPayload } from '../../../domain/application/dto/auth/usuario-jwt-payload.dto';
+import { UsuarioPrismaRepository } from 'src/infrastructure/repository/usuario-prisma.repository';
+import { Usuario } from 'src/domain/entity/usuario';
 
 @Injectable()
-export class JwtStrategy extends PassportStrategy(Strategy) {
-  constructor(configService: ConfigService) {
+export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
+  private logger = new Logger(JwtStrategy.name);
+  constructor(
+    configService: ConfigService,
+    private readonly usuarioRepository: UsuarioPrismaRepository,
+  ) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
@@ -15,7 +20,32 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     });
   }
 
-  async validate(payload: UsuarioJWTPayload): Promise<UsuarioDecodedDto> {
-    return { id: payload.sub, login: payload.login };
+  async validate(payload: UsuarioJWTPayload): Promise<Usuario> {
+    if (this.verificaExpiracao(payload)) {
+      const usuario = await this.usuarioRepository.findByRefreshToken(
+        payload.refreshToken,
+      );
+      if (!usuario) {
+        this.logger.error('Usuário não encontrado');
+        throw new UnauthorizedException('Acesso negado');
+      }
+
+      return this.usuarioRepository.updateRefreshToken(usuario.getId());
+    }
+
+    const usuario = await this.usuarioRepository.findById(payload.id);
+    if (!usuario) {
+      throw new UnauthorizedException('Usuário não encontrado');
+    }
+    return usuario;
+  }
+
+  private verificaExpiracao(payload: UsuarioJWTPayload) {
+    const dataAtual = new Date().getTime();
+    const dataExpiracao = new Date(payload.exp * 1000).getTime();
+
+    console.log('dataAtual', dataAtual);
+    console.log('dataExpiracao', dataExpiracao);
+    return dataAtual > dataExpiracao;
   }
 }
