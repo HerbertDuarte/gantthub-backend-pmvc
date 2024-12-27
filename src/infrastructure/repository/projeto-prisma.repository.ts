@@ -6,31 +6,41 @@ export class ProjetoPrismaRepository {
   constructor(private readonly prismaService: PrismaService) {}
 
   public async getAll() {
-    return this.prismaService.projetoPrisma.findMany({});
+    return this.prismaService.projetoPrisma.findMany({
+      include: {
+        usuariosProjetos: {
+          include: {
+            usuario: true,
+          },
+        },
+      },
+    });
   }
 
   public getOne() {
-    return this.prismaService.projetoPrisma.findFirst({
-      include: {
-        marcos: {
-          include: {
-            tarefas: {
-              include: {
-                usuariosTarefas: {
-                  include: {
-                    usuario: true,
-                  },
+    return this.prismaService.projetoPrisma.findFirst(this.insertions);
+  }
+
+  private readonly insertions = {
+    include: {
+      marcos: {
+        include: {
+          tarefas: {
+            include: {
+              usuariosTarefas: {
+                include: {
+                  usuario: true,
                 },
-                checkLists: {
-                  include: {
-                    checkItems: true,
-                  },
+              },
+              checkLists: {
+                include: {
+                  checkItems: true,
                 },
               },
             },
           },
         },
       },
-    });
-  }
+    },
+  };
 }

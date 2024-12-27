@@ -57,7 +57,14 @@ export class UsuarioController {
     return this.buscarPorIdUsuarioUseCase.execute(id);
   }
 
-  @Put('/perfil/')
+  @Get('/perfil')
+  @UseGuards(JwtAuthGuard)
+  async getPerfil(@Req() req: Request) {
+    const userId = req.user.getId();
+    return this.buscarPorIdUsuarioUseCase.execute(userId);
+  }
+
+  @Put('/perfil')
   @UseGuards(JwtAuthGuard)
   async atualizaPerfil(
     @Body() data: AtualizaPerfilUsuarioDto,

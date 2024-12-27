@@ -100,4 +100,5 @@ export class Usuario {
   public getLogin = () => this.login;
   public getSenha = () => this.senha;
   public getCreatedAt = () => this.createdAt;
+  public getImageUrl = () => this.imageUrl;
 }

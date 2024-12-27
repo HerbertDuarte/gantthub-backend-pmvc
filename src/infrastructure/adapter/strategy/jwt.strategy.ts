@@ -43,9 +43,6 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
   private verificaExpiracao(payload: UsuarioJWTPayload) {
     const dataAtual = new Date().getTime();
     const dataExpiracao = new Date(payload.exp * 1000).getTime();
-
-    console.log('dataAtual', dataAtual);
-    console.log('dataExpiracao', dataExpiracao);
     return dataAtual > dataExpiracao;
   }
 }
