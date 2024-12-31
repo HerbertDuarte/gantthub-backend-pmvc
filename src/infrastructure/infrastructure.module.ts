@@ -1,5 +1,5 @@
 import { Logger, Module, Provider } from '@nestjs/common';
-import { LoginUseCase } from 'src/domain/application/usecases/auth/login.usecase';
+import { LoginService } from 'src/infrastructure/adapter/service/login.service';
 import { AuthUsuarioValidator } from 'src/domain/application/validators/auth-usuario.validator';
 import { JwtStrategy } from './adapter/strategy/jwt.strategy';
 import { LocalStrategy } from './adapter/strategy/local.strategy';
@@ -22,9 +22,11 @@ import { BuscarUsuariosPaginacaoUseCase } from 'src/domain/application/usecases/
 import { UsuarioController } from './adapter/controller/usuario.controller';
 import { ProjetoController } from './adapter/controller/projeto.controller.';
 import { ProjetoPrismaRepository } from './repository/projeto-prisma.repository';
+import { TarefaController } from './adapter/controller/tarefa.controller';
+import { TarefaPrismaRepository } from './repository/tarefa-prisma.repository';
 
 const usecases: Provider[] = [
-  LoginUseCase,
+  LoginService,
   CriarUsuarioUseCase,
   AtualizarUsuarioUseCase,
   DeletarUsuarioUseCase,
@@ -36,6 +38,7 @@ const usecases: Provider[] = [
 const repositories: Provider[] = [
   UsuarioPrismaRepository,
   ProjetoPrismaRepository,
+  TarefaPrismaRepository,
 ];
 const validators: Provider[] = [
   EmailJaCadastradoValidator,
@@ -68,7 +71,12 @@ const providers: Provider[] = [
       inject: [ConfigService],
     }),
   ],
-  controllers: [AuthController, UsuarioController, ProjetoController],
+  controllers: [
+    AuthController,
+    UsuarioController,
+    ProjetoController,
+    TarefaController,
+  ],
   providers,
   exports: providers,
 })

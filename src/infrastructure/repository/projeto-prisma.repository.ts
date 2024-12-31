@@ -41,6 +41,11 @@ export class ProjetoPrismaRepository {
           },
         },
       },
+      usuariosProjetos: {
+        include: {
+          usuario: true,
+        },
+      },
     },
   };
 }

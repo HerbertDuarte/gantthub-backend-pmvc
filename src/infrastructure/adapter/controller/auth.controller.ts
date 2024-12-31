@@ -1,16 +1,16 @@
-import { Controller, Logger, Post, Req, UseGuards } from '@nestjs/common';
+import { Controller, Logger, Post, Req, Res, UseGuards } from '@nestjs/common';
 import { ApiBody, ApiTags } from '@nestjs/swagger';
-import { LoginUseCase } from '../../../domain/application/usecases/auth/login.usecase';
+import { LoginService } from '../service/login.service';
 import { AutenticaUsuarioDto } from '../../../domain/application/dto/auth/autentica-usuario.dto';
 import { LocalAuthGuard } from '../guard/local-auth.guard';
-import { Request } from 'express';
+import { Request, Response } from 'express';
 
 @Controller('auth')
 @ApiTags('Autenticação')
 export class AuthController {
   constructor(
     private readonly logger: Logger,
-    private loginUseCase: LoginUseCase,
+    private readonly loginService: LoginService,
   ) {}
 
   @UseGuards(LocalAuthGuard)
@@ -19,8 +19,8 @@ export class AuthController {
     description: 'Dados para login',
     type: AutenticaUsuarioDto,
   })
-  async login(@Req() req: Request) {
+  async login(@Req() req: Request, @Res() res: Response) {
     this.logger.debug('Login realizado no sistema!');
-    return this.loginUseCase.execute(req);
+    return this.loginService.execute(req, res);
   }
 }
