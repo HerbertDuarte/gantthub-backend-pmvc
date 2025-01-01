@@ -19,8 +19,8 @@ export class AuthController {
     description: 'Dados para login',
     type: AutenticaUsuarioDto,
   })
-  async login(@Req() req: Request, @Res() res: Response) {
+  async login(@Req() req: Request) {
     this.logger.debug('Login realizado no sistema!');
-    return this.loginService.execute(req, res);
+    return this.loginService.execute(req);
   }
 }

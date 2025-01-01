@@ -17,8 +17,13 @@ export class ProjetoPrismaRepository {
     });
   }
 
-  public getOne() {
-    return this.prismaService.projetoPrisma.findFirst(this.insertions);
+  public getOne(id: string) {
+    return this.prismaService.projetoPrisma.findUnique({
+      ...this.insertions,
+      where: {
+        id,
+      },
+    });
   }
 
   private readonly insertions = {

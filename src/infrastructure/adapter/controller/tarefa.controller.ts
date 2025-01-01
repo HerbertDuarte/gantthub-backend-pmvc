@@ -22,6 +22,8 @@ export class TarefaController {
 
   @Post()
   getAll(@Body() body: CreateTarefaDto) {
+    console.log(body);
+
     return this.tarefaPrismaRepository.create(body);
   }
 

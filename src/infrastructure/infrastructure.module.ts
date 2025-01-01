@@ -24,6 +24,8 @@ import { ProjetoController } from './adapter/controller/projeto.controller.';
 import { ProjetoPrismaRepository } from './repository/projeto-prisma.repository';
 import { TarefaController } from './adapter/controller/tarefa.controller';
 import { TarefaPrismaRepository } from './repository/tarefa-prisma.repository';
+import { MarcoController } from './adapter/controller/marco.controller';
+import { MarcoPrismaRepository } from './repository/marco-prisma.repository';
 
 const usecases: Provider[] = [
   LoginService,
@@ -39,6 +41,7 @@ const repositories: Provider[] = [
   UsuarioPrismaRepository,
   ProjetoPrismaRepository,
   TarefaPrismaRepository,
+  MarcoPrismaRepository,
 ];
 const validators: Provider[] = [
   EmailJaCadastradoValidator,
@@ -76,6 +79,7 @@ const providers: Provider[] = [
     UsuarioController,
     ProjetoController,
     TarefaController,
+    MarcoController,
   ],
   providers,
   exports: providers,

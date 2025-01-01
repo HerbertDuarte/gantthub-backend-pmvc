@@ -16,7 +16,7 @@ export class LoginService {
 
   async execute(
     request: Request,
-    response: Response,
+    response?: Response,
   ): Promise<LoginResponseDto> {
     const usuario = request.user;
     const payload = {
@@ -31,7 +31,7 @@ export class LoginService {
       privateKey: this.config.get('JWT_SECRET'),
     });
     const bearerToken = `Bearer ${accessToken}`;
-    response.setHeader('Authorization', bearerToken);
+    response && response.setHeader('Authorization', bearerToken);
 
     return {
       access_token: accessToken,

@@ -51,8 +51,8 @@ model TarefaPrisma {
   id         String   @id @default(uuid())
   nome       String
   descricao  String
-  dataInicio DateTime
-  dataFim    DateTime
+  dataInicio DateTime @db.Timestamptz(3)
+  dataFim    DateTime @db.Timestamptz(3)
   status     Int
 
   createdAt DateTime @default(now()) @db.Timestamptz(3)

@@ -17,6 +17,6 @@ export class ProjetoController {
   @UseGuards(JwtAuthGuard)
   @Get(':id')
   async getOne(@Param('id') id: string) {
-    return this.projetoPrismaRepository.getOne();
+    return this.projetoPrismaRepository.getOne(id);
   }
 }
