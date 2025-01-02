@@ -1,6 +1,5 @@
 import { plainToClass } from 'class-transformer';
 import {
-  IsBooleanString,
   IsEnum,
   IsNotEmpty,
   IsNumberString,
