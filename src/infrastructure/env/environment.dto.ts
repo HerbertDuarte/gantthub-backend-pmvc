@@ -34,10 +34,6 @@ export class Environment {
 
   @IsNotEmpty()
   @IsString()
-  ELASTICSEARCH: string;
-
-  @IsNotEmpty()
-  @IsString()
   JWT_SECRET: string;
 
   @IsNotEmpty()
@@ -47,10 +43,6 @@ export class Environment {
   @IsNotEmpty()
   @IsString()
   DATABASE_URL: string;
-
-  @IsNotEmpty()
-  @IsBooleanString()
-  SSL: boolean;
 }
 
 export function validateEnv(config: Record<string, any>) {
