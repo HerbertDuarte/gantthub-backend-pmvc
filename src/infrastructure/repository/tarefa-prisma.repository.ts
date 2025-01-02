@@ -37,8 +37,6 @@ export class TarefaPrismaRepository {
     dto.descricao && (data['descricao'] = dto.descricao);
     dto.status !== undefined && (data['status'] = dto.status);
 
-    console.log(data);
-
     return this.prismaService.tarefaPrisma.update({
       where: {
         id,
