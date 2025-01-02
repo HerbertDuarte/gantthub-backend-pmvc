@@ -41,7 +41,7 @@ model MarcoPrisma {
   nome    String
   tarefas TarefaPrisma[]
 
-  projeto   ProjetoPrisma @relation(fields: [projetoId], references: [id])
+  projeto   ProjetoPrisma @relation(fields: [projetoId], references: [id], onDelete: Cascade)
   projetoId String
 
   @@map("marcos")
@@ -51,13 +51,13 @@ model TarefaPrisma {
   id         String   @id @default(uuid())
   nome       String
   descricao  String
-  dataInicio DateTime @db.Timestamptz(3)
-  dataFim    DateTime @db.Timestamptz(3)
+  dataInicio DateTime
+  dataFim    DateTime
   status     Int
 
   createdAt DateTime @default(now()) @db.Timestamptz(3)
 
-  marco   MarcoPrisma @relation(fields: [marcoId], references: [id])
+  marco   MarcoPrisma @relation(fields: [marcoId], references: [id], onDelete: Cascade)
   marcoId String
 
   usuariosTarefas UsuarioTarefaPrisma[]
@@ -71,7 +71,7 @@ model CheckListPrisma {
   nome      String
   createdAt DateTime @default(now()) @db.Timestamptz(3)
 
-  tarefa     TarefaPrisma      @relation(fields: [tarefaId], references: [id])
+  tarefa     TarefaPrisma      @relation(fields: [tarefaId], references: [id], onDelete: Cascade)
   tarefaId   String
   checkItems CheckItemPrisma[]
 
@@ -84,7 +84,7 @@ model CheckItemPrisma {
   checked   Boolean
   createdAt DateTime @default(now()) @db.Timestamptz(3)
 
-  checkList   CheckListPrisma @relation(fields: [checkListId], references: [id])
+  checkList   CheckListPrisma @relation(fields: [checkListId], references: [id], onDelete: Cascade)
   checkListId String
 
   @@id([checkListId, id])
@@ -92,8 +92,8 @@ model CheckItemPrisma {
 }
 
 model UsuarioTarefaPrisma {
-  usuario   UsuarioPrisma @relation(fields: [usuarioId], references: [id])
-  tarefa    TarefaPrisma  @relation(fields: [tarefaId], references: [id])
+  usuario   UsuarioPrisma @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+  tarefa    TarefaPrisma  @relation(fields: [tarefaId], references: [id], onDelete: Cascade)
   usuarioId String
   tarefaId  String
 
@@ -103,7 +103,7 @@ model UsuarioTarefaPrisma {
 
 model UsuarioProjetoPrisma {
   usuario     UsuarioPrisma @relation(fields: [usuarioId], references: [id])
-  projeto     ProjetoPrisma @relation(fields: [projetoId], references: [id])
+  projeto     ProjetoPrisma @relation(fields: [projetoId], references: [id], onDelete: Cascade)
   tipoVinculo Int
   usuarioId   String
   projetoId   String

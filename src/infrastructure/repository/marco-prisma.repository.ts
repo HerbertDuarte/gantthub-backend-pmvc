@@ -34,4 +34,12 @@ export class MarcoPrismaRepository {
       data,
     });
   }
+
+  async delete(id: string) {
+    return this.prismaService.marcoPrisma.delete({
+      where: {
+        id,
+      },
+    });
+  }
 }

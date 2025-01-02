@@ -1,4 +1,4 @@
-import { Body, Controller, Param, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Param, Patch, Post } from '@nestjs/common';
 import { MarcoPrismaRepository } from 'src/infrastructure/repository/marco-prisma.repository';
 
 export type CreateMarcoDto = {
@@ -21,5 +21,10 @@ export class MarcoController {
     @Body() body: Partial<CreateMarcoDto>,
   ) {
     return this.marcoPrismaRepository.update(id, body);
+  }
+
+  @Delete(':id')
+  delete(@Param('id') id: string) {
+    return this.marcoPrismaRepository.delete(id);
   }
 }

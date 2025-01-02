@@ -1,4 +1,5 @@
-import { Body, Controller, Param, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Param, Patch, Post } from '@nestjs/common';
+import { TarefaStatusEnum } from 'src/domain/enum/tarefa-status.enum';
 import { TarefaPrismaRepository } from 'src/infrastructure/repository/tarefa-prisma.repository';
 
 export type CreateTarefaDto = {
@@ -12,6 +13,7 @@ export type CreateTarefaDto = {
 export type UpdateTarefaDto = {
   descricao: string;
   nome: string;
+  status: TarefaStatusEnum;
 };
 
 @Controller('tarefa')
@@ -33,5 +35,10 @@ export class TarefaController {
     @Body() body: Partial<UpdateTarefaDto>,
   ) {
     return this.tarefaPrismaRepository.update(id, body);
+  }
+
+  @Delete(':id')
+  delete(@Param('id') id: string) {
+    return this.tarefaPrismaRepository.delete(id);
   }
 }
