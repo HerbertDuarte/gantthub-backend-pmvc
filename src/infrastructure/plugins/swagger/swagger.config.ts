@@ -1,7 +1,7 @@
 import { ConfigService } from '@nestjs/config';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { Environment } from 'env/environment.dto';
+import { Environment } from 'src/infrastructure/env/environment.dto';
 
 export function swaggerConfig(app: NestExpressApplication) {
   const config = app.get(ConfigService<Environment, true>);

@@ -2,7 +2,7 @@ import { Logger } from '@nestjs/common';
 import { HttpsOptions } from '@nestjs/common/interfaces/external/https-options.interface';
 import { ConfigService } from '@nestjs/config';
 import { NestExpressApplication } from '@nestjs/platform-express';
-import { Environment } from 'env/environment.dto';
+import { Environment } from 'src/infrastructure/env/environment.dto';
 
 export function bootstrapLogger(
   app: NestExpressApplication,

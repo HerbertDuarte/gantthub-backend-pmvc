@@ -5,7 +5,7 @@ import { LoginResponseDto } from '../../../domain/application/dto/auth/login-res
 import { randomUUID } from 'crypto';
 import { Request, Response } from 'express';
 import { ConfigService } from '@nestjs/config';
-import { Environment } from 'env/environment.dto';
+import { Environment } from 'src/infrastructure/env/environment.dto';
 
 @Injectable()
 export class LoginService {
