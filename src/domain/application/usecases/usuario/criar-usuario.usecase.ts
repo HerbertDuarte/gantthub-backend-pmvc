@@ -1,10 +1,11 @@
 import { Injectable } from '@nestjs/common';
+import { HashUtils } from 'lib-test-herbert';
+import { UseCase } from 'src/core/interfaces/usecase.interface';
+
 import { CriaUsuarioDto } from '../../dto/usuario/cria-usuario.dto';
 import { UsuarioPrismaRepository } from '../../../../infrastructure/repository/usuario-prisma.repository';
-import { HashUtils } from 'lib-test-herbert';
 import { EmailJaCadastradoValidator } from '../../validators/email-ja-cadastrado.validator';
 import { LoginJaCadastradoValidator } from '../../validators/login-ja-cadastrado.validator';
-import { UseCase } from 'src/core/interfaces/usecase.interface';
 import { Usuario } from '../../../entity/usuario';
 
 @Injectable()

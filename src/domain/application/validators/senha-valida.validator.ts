@@ -1,5 +1,6 @@
 import { ConflictException, Injectable, Logger } from '@nestjs/common';
 import { HashUtils } from 'lib-test-herbert';
+
 import { AtualizaPerfilUsuarioDto } from '../dto/usuario/atualiza-perfil.dto';
 import { Usuario } from '../../entity/usuario';
 

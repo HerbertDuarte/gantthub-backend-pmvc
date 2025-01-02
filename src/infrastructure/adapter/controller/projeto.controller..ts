@@ -1,5 +1,6 @@
 import { Controller, Get, Param, UseGuards } from '@nestjs/common';
 import { ProjetoPrismaRepository } from 'src/infrastructure/repository/projeto-prisma.repository';
+
 import { JwtAuthGuard } from '../guard/jwt-auth.guard';
 
 @Controller('projeto')
