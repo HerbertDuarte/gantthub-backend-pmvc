@@ -2,11 +2,6 @@
   "version": 2,
   "functions": {
     "api/server.ts": {
-      "memory": 3009,
-      "maxDuration": 30
-    },
-    "dist/*.js": {
-      "memory": 3009,
       "maxDuration": 30
     }
   },
