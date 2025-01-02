@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { UseCase } from 'src/core/interfaces/usecase.interface';
 import { LoginResponseDto } from '../../../domain/application/dto/auth/login-response.dto';
 import { randomUUID } from 'crypto';
 import { Request, Response } from 'express';
