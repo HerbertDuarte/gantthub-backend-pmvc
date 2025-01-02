@@ -1,8 +1,8 @@
 {
-  "name": "modelo-back-end",
+  "name": "ganttly-backend",
   "version": "1.0.1",
   "description": "",
-  "author": "Jaquionias Castro",
+  "author": "Herbert Duarte",
   "private": true,
   "license": "UNLICENSED",
   "prisma": {
@@ -60,7 +60,7 @@
     "winston-elasticsearch": "0.7.0"
   },
   "devDependencies": {
-    "@nestjs/cli": "^10.4.2",
+    "@nestjs/cli": "^10.4.9",
     "@nestjs/schematics": "^8.0.0",
     "@nestjs/testing": "^10.3.10",
     "@types/bcryptjs": "^2.4.6",
