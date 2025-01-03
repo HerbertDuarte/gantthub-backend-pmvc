@@ -8,6 +8,7 @@ import {
   IsEnum,
 } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
+
 import { EnumSituacaoUsuario } from '../../../enum/usuario-situacao.enum';
 
 export class AtualizaPerfilUsuarioDto {

@@ -1,11 +1,12 @@
-import { PaginateUsuarioDto } from '../../domain/application/dto/usuario/paginate-usuario.dto';
-import { IUsuarioRepository } from '../../domain/repository/usuario.respository';
-import { PrismaService } from 'src/infrastructure/plugins/database/services/prisma.service';
+import { PrismaService } from '@/src/infrastructure/plugins/database/services/prisma.service';
 import { Injectable } from '@nestjs/common';
 import { PaginateResponse, PaginateUtil } from 'lib-test-herbert';
+import { randomUUID } from 'crypto';
+
+import { PaginateUsuarioDto } from '../../domain/application/dto/usuario/paginate-usuario.dto';
+import { IUsuarioRepository } from '../../domain/repository/usuario.respository';
 import { Usuario } from '../../domain/entity/usuario';
 import { UsuarioMapper } from '../mapper/usuario.mapper';
-import { randomUUID } from 'crypto';
 
 @Injectable()
 export class UsuarioPrismaRepository implements IUsuarioRepository {

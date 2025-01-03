@@ -1,6 +1,6 @@
 import { Body, Controller, Delete, Param, Patch, Post } from '@nestjs/common';
-import { TarefaStatusEnum } from 'src/domain/enum/tarefa-status.enum';
-import { TarefaPrismaRepository } from 'src/infrastructure/repository/tarefa-prisma.repository';
+import { TarefaStatusEnum } from '@/src/domain/enum/tarefa-status.enum';
+import { TarefaPrismaRepository } from '@/src/infrastructure/repository/tarefa-prisma.repository';
 
 export type CreateTarefaDto = {
   nome: string;

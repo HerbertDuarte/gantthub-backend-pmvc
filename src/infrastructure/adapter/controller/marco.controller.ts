@@ -1,5 +1,5 @@
 import { Body, Controller, Delete, Param, Patch, Post } from '@nestjs/common';
-import { MarcoPrismaRepository } from 'src/infrastructure/repository/marco-prisma.repository';
+import { MarcoPrismaRepository } from '@/src/infrastructure/repository/marco-prisma.repository';
 
 export type CreateMarcoDto = {
   nome: string;
