@@ -1,7 +1,6 @@
 import { Validator } from 'src/core/interfaces/validator.interface';
-import { ConflictException, Injectable, Logger } from '@nestjs/common';
-
 import { UsuarioPrismaRepository } from '../../../infrastructure/repository/usuario-prisma.repository';
+import { ConflictException, Injectable, Logger } from '@nestjs/common';
 
 @Injectable()
 export class EmailJaCadastradoValidator implements Validator<string, void> {

@@ -1,10 +1,9 @@
 import { Strategy } from 'passport-local';
 import { PassportStrategy } from '@nestjs/passport';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { AuthUsuarioValidator } from '../../../domain/application/validators/auth-usuario.validator';
 import { Usuario } from 'src/domain/entity/usuario';
 import { UsuarioPrismaRepository } from 'src/infrastructure/repository/usuario-prisma.repository';
-
-import { AuthUsuarioValidator } from '../../../domain/application/validators/auth-usuario.validator';
 
 @Injectable()
 export class LocalStrategy extends PassportStrategy(Strategy, 'local') {

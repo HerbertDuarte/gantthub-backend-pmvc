@@ -1,4 +1,5 @@
 import { randomUUID } from 'crypto';
+import { EnumSituacaoUsuario } from '../enum/usuario-situacao.enum';
 import { isHash } from 'src/lib/string/is-hash';
 import { hashSync } from 'bcryptjs';
 import { isEmail } from 'src/lib/string/is-email';
@@ -6,8 +7,6 @@ import { hasSymbols } from 'src/lib/string/has-symbols';
 import { hasUppercase } from 'src/lib/string/has-uppercase';
 import { hasLowercase } from 'src/lib/string/has-lower-case';
 import { hasNumber } from 'src/lib/string/has-number';
-
-import { EnumSituacaoUsuario } from '../enum/usuario-situacao.enum';
 
 type UsuarioProps = {
   id?: string;

@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-
 import { PrismaService } from '../plugins/database/services/prisma.service';
 import { CreateMarcoDto } from '../adapter/controller/marco.controller';
 

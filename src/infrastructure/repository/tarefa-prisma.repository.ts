@@ -1,11 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { TarefaStatusEnum } from 'src/domain/enum/tarefa-status.enum';
-
 import { PrismaService } from '../plugins/database/services/prisma.service';
 import {
   CreateTarefaDto,
   UpdateTarefaDto,
 } from '../adapter/controller/tarefa.controller';
+import { TarefaStatusEnum } from 'src/domain/enum/tarefa-status.enum';
 
 @Injectable()
 export class TarefaPrismaRepository {

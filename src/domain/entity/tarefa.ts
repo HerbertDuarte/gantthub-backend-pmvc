@@ -1,5 +1,4 @@
 import { randomUUID } from 'crypto';
-
 import { TarefaStatusEnum } from '../enum/tarefa-status.enum';
 
 type TarefaProps = {

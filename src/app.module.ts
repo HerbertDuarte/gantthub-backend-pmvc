@@ -1,6 +1,5 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-
 import { validateEnv } from './infrastructure/env/environment';
 import { InfrastructureModule } from './infrastructure/infrastructure.module';
 

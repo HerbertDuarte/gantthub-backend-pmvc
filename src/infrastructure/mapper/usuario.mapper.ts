@@ -1,5 +1,4 @@
 import { UsuarioPrisma } from '@prisma/client';
-
 import { Usuario } from '../../domain/entity/usuario';
 import { EnumSituacaoUsuario } from '../../domain/enum/usuario-situacao.enum';
 

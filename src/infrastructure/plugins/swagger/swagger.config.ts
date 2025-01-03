@@ -1,7 +1,6 @@
 import { ConfigService } from '@nestjs/config';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-
 import { Environment } from '../../env/environment';
 
 export function swaggerConfig(app: NestExpressApplication) {

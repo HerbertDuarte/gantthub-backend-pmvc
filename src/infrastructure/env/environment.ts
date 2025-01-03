@@ -6,7 +6,6 @@ import {
   IsString,
   validateSync,
 } from 'class-validator';
-
 import { InvalidEnvironmentException } from './exception/invalid-env.exception';
 
 type NodeEnv = 'production' | 'development' | 'test';

@@ -1,5 +1,4 @@
 import { Injectable, Logger, NotFoundException } from '@nestjs/common';
-
 import { AtualizaUsuarioDto } from '../dto/usuario/atualiza-usuario.dto';
 import { EmailJaCadastradoValidator } from './email-ja-cadastrado.validator';
 import { LoginJaCadastradoValidator } from './login-ja-cadastrado.validator';
