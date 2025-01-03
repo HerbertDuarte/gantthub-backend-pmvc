@@ -1,9 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { LoginResponseDto } from '../../../domain/application/dto/auth/login-response.dto';
 import { randomUUID } from 'crypto';
 import { Request, Response } from 'express';
 import { ConfigService } from '@nestjs/config';
+
+import { LoginResponseDto } from '../../../domain/application/dto/auth/login-response.dto';
 import { Environment } from '../../env/environment';
 
 @Injectable()

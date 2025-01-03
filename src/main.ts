@@ -1,7 +1,8 @@
 import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import { NestExpressApplication } from '@nestjs/platform-express';
+
+import { AppModule } from './app.module';
 import { swaggerConfig } from './infrastructure/plugins/swagger/swagger.config';
 import { bootstrapLogger } from './infrastructure/plugins/system-logs/bootstrap-logger';
 

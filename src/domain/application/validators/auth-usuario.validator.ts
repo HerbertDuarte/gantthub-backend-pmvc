@@ -1,9 +1,9 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { HashUtils } from 'lib-test-herbert';
-import { UsuarioPrismaRepository } from 'src/infrastructure/repository/usuario-prisma.repository';
-import { Validator } from 'src/core/interfaces/validator.interface';
-import { EnumSituacaoUsuario } from 'src/domain/enum/usuario-situacao.enum';
-import { Usuario } from 'src/domain/entity/usuario';
+import { UsuarioPrismaRepository } from '@/src/infrastructure/repository/usuario-prisma.repository';
+import { Validator } from '@/src/core/interfaces/validator.interface';
+import { EnumSituacaoUsuario } from '@/src/domain/enum/usuario-situacao.enum';
+import { Usuario } from '@/src/domain/entity/usuario';
 
 type ValidateUsuarioProps = {
   email: string;
