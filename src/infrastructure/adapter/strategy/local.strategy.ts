@@ -1,10 +1,10 @@
 import { Strategy } from 'passport-local';
 import { PassportStrategy } from '@nestjs/passport';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { Usuario } from '@/src/domain/entity/usuario';
 import { UsuarioPrismaRepository } from '@/src/infrastructure/repository/usuario-prisma.repository';
 
 import { AuthUsuarioValidator } from '../../../domain/application/validators/auth-usuario.validator';
+import { UsuarioPrisma } from '@prisma/client';
 
 @Injectable()
 export class LocalStrategy extends PassportStrategy(Strategy, 'local') {
@@ -13,18 +13,21 @@ export class LocalStrategy extends PassportStrategy(Strategy, 'local') {
     private readonly usuarioRepository: UsuarioPrismaRepository,
   ) {
     super({
-      usernameField: 'email',
+      usernameField: 'username',
     });
   }
 
-  async validate(email: string, senha: string): Promise<Usuario> {
-    const usuario = await this.authUsuarioValidator.validate({ email, senha });
+  async validate(username: string, senha: string): Promise<UsuarioPrisma> {
+    const usuario = await this.authUsuarioValidator.validate({
+      username,
+      senha,
+    });
     if (!usuario) {
       throw new UnauthorizedException('Usuário ou senha inválidos!');
     }
 
     const usuarioLogado = await this.usuarioRepository.updateRefreshToken(
-      usuario.getId(),
+      usuario.id,
     );
     return usuarioLogado;
   }

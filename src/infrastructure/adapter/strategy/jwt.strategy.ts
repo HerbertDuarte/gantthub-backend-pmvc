@@ -3,9 +3,9 @@ import { PassportStrategy } from '@nestjs/passport';
 import { Injectable, Logger, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { UsuarioPrismaRepository } from '@/src/infrastructure/repository/usuario-prisma.repository';
-import { Usuario } from '@/src/domain/entity/usuario';
 
 import { UsuarioJWTPayload } from '../../../domain/application/dto/auth/usuario-jwt-payload.dto';
+import { UsuarioPrisma } from '@prisma/client';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
@@ -21,7 +21,7 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
     });
   }
 
-  async validate(payload: UsuarioJWTPayload): Promise<Usuario> {
+  async validate(payload: UsuarioJWTPayload): Promise<UsuarioPrisma> {
     if (this.verificaExpiracao(payload)) {
       const usuario = await this.usuarioRepository.findByRefreshToken(
         payload.refreshToken,
@@ -31,7 +31,7 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
         throw new UnauthorizedException('Acesso negado');
       }
 
-      return this.usuarioRepository.updateRefreshToken(usuario.getId());
+      return this.usuarioRepository.updateRefreshToken(usuario.id);
     }
 
     const usuario = await this.usuarioRepository.findById(payload.id);

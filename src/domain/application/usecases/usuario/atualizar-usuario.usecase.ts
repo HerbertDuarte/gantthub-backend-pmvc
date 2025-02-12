@@ -1,16 +1,17 @@
 import { Injectable, ConflictException } from '@nestjs/common';
 import { HashUtils } from 'lib-test-herbert';
 import { UseCase } from '@/src/core/interfaces/usecase.interface';
-import { Usuario } from '@/src/domain/entity/usuario';
 import { UsuarioPrismaRepository } from '@/src/infrastructure/repository/usuario-prisma.repository';
 
 import { AtualizaUsuarioDto } from '../../dto/usuario/atualiza-usuario.dto';
 import { CriaUsuarioDto } from '../../dto/usuario/cria-usuario.dto';
 import { SenhaValidaValidator } from '../../validators/senha-valida.validator';
 import { UpdateUsuarioValidator } from '../../validators/update-usuario.validator';
+import { UsuarioPrisma } from '@prisma/client';
+import { UsuarioPrismaBuilder } from '@/src/infrastructure/builder/usuario-prisma.builder';
 
 @Injectable()
-export class AtualizarUsuarioUseCase implements UseCase<Usuario> {
+export class AtualizarUsuarioUseCase implements UseCase<UsuarioPrisma> {
   constructor(
     private readonly usuarioRepository: UsuarioPrismaRepository,
     private readonly updateUsuarioValidator: UpdateUsuarioValidator,
@@ -21,7 +22,10 @@ export class AtualizarUsuarioUseCase implements UseCase<Usuario> {
     const usuarioExists = await this.usuarioRepository.findById(id);
     if (!usuarioExists) throw new ConflictException('Usuário não encontrado.');
 
-    const atualizaUsuarioPayload: Partial<CriaUsuarioDto> = data;
+    const atualizaUsuarioPayload: Partial<CriaUsuarioDto> = {
+      ...data,
+      senha: undefined,
+    };
 
     const atualizaSenha = data.senhaNova;
 
@@ -35,16 +39,10 @@ export class AtualizarUsuarioUseCase implements UseCase<Usuario> {
       atualizaUsuarioPayload,
     );
 
-    const usuario = new Usuario({
-      id: usuarioExists.getId(),
-      email: usuarioExists.getEmail(),
-      nome: usuarioExists.getNome(),
-      login: usuarioExists.getLogin(),
-      createdAt: usuarioExists.getCreatedAt(),
-      senha: usuarioExists.getSenha(),
-      situacao: usuarioExists.getSituacao(),
+    const usuario = {
+      ...usuarioExists,
       ...atualizaUsuarioPayload,
-    });
+    };
 
     await this.usuarioRepository.atualiza(id, usuario);
   }

@@ -20,11 +20,11 @@ export class LoginService {
   ): Promise<LoginResponseDto> {
     const usuario = request.user;
     const payload = {
-      email: usuario.getEmail(),
-      id: usuario.getId(),
+      email: usuario.email,
+      id: usuario.id,
       refreshToken: randomUUID(),
     };
-    const usuarioId = usuario.getId();
+    const usuarioId = usuario.id;
     const accessToken = this.jwtService.sign(payload, {
       expiresIn: this.config.get('JWT_EXPIRE'),
       algorithm: 'HS256',

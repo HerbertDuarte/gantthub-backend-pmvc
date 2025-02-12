@@ -1,11 +1,11 @@
-import { Usuario } from '@/src/domain/entity/usuario';
+import { UsuarioPrisma } from '@prisma/client';
 
 declare module 'express' {
   export interface Request {
-    user: Usuario;
+    user: UsuarioPrisma;
   }
 
   export interface Response {
-    user: Usuario;
+    user: UsuarioPrisma;
   }
 }

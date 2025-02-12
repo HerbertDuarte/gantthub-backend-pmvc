@@ -1,11 +1,11 @@
 import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { UseCase } from '@/src/core/interfaces/usecase.interface';
-import { Usuario } from '@/src/domain/entity/usuario';
 
 import { UsuarioPrismaRepository } from '../../../../infrastructure/repository/usuario-prisma.repository';
+import { UsuarioPrisma } from '@prisma/client';
 
 @Injectable()
-export class DeletarUsuarioUseCase implements UseCase<Usuario> {
+export class DeletarUsuarioUseCase implements UseCase<UsuarioPrisma> {
   private readonly logger = new Logger(DeletarUsuarioUseCase.name);
   constructor(private readonly usuarioRepository: UsuarioPrismaRepository) {}
 

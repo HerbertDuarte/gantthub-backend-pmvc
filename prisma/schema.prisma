@@ -8,18 +8,18 @@ datasource db {
 }
 
 model UsuarioPrisma {
-  id           String   @id @default(uuid())
+  id           String               @id @default(uuid())
   nome         String
-  email        String   @unique
-  situacao     Int      @default(1)
-  login        String   @unique
+  email        String               @unique
+  situacao     Int                  @default(1) // 1 - Ativo, 2 - Inativo
+  login        String               @unique
+  role         Int                  @default(1) // 1 - Usuario, 2 - Admin, 3 - Master
   refreshToken String?
   senha        String
   imageUrl     String?
-  createdAt    DateTime @default(now()) @db.Timestamptz(3)
-
-  UsuarioTarefa  UsuarioTarefaPrisma[]
-  UsuarioProjeto UsuarioProjetoPrisma[]
+  createdAt    DateTime             @default(now()) @db.Timestamptz(3)
+  setores      UsuarioSetorPrisma[]
+  tarefas      TarefaPrisma[]
 
   @@map("usuarios")
 }
@@ -30,16 +30,16 @@ model ProjetoPrisma {
   descricao String?
   marcos    MarcoPrisma[]
 
-  createdAt        DateTime               @default(now()) @db.Timestamptz(3)
-  usuariosProjetos UsuarioProjetoPrisma[]
+  createdAt DateTime @default(now()) @db.Timestamptz(3)
 
   @@map("projetos")
 }
 
 model MarcoPrisma {
-  id      String         @id @default(uuid())
-  nome    String
-  tarefas TarefaPrisma[]
+  id        String         @id @default(uuid())
+  nome      String
+  tarefas   TarefaPrisma[]
+  createdAt DateTime       @default(now()) @db.Timestamptz(3)
 
   projeto   ProjetoPrisma @relation(fields: [projetoId], references: [id], onDelete: Cascade)
   projetoId String
@@ -53,61 +53,45 @@ model TarefaPrisma {
   descricao  String
   dataInicio DateTime
   dataFim    DateTime
-  status     Int
+  status     Int // 1 - Nao iniciado, 2 - Em andamento, 3 - Concluido, 4 - Concluido com atraso, 5 - Cancelado
+  createdAt  DateTime @default(now()) @db.Timestamptz(3)
 
-  createdAt DateTime @default(now()) @db.Timestamptz(3)
+  usuario   UsuarioPrisma @relation(fields: [usuarioId], references: [id])
+  usuarioId String
+
+  tarefaPai   TarefaPrisma? @relation("TarefaPai", fields: [tarefaPaiId], references: [id])
+  tarefaPaiId String?
+
+  tarefas TarefaPrisma[] @relation("TarefaPai")
 
   marco   MarcoPrisma @relation(fields: [marcoId], references: [id], onDelete: Cascade)
   marcoId String
 
-  usuariosTarefas UsuarioTarefaPrisma[]
-  checkLists      CheckListPrisma[]
-
   @@map("tarefas")
 }
 
-model CheckListPrisma {
+model SetorPrisma {
   id        String   @id @default(uuid())
   nome      String
   createdAt DateTime @default(now()) @db.Timestamptz(3)
 
-  tarefa     TarefaPrisma      @relation(fields: [tarefaId], references: [id], onDelete: Cascade)
-  tarefaId   String
-  checkItems CheckItemPrisma[]
+  usuarios UsuarioSetorPrisma[]
 
-  @@map("checkList")
+  setores    SetorPrisma[] @relation("SetorPai")
+  setorPai   SetorPrisma?  @relation("SetorPai", fields: [setorPaiId], references: [id])
+  setorPaiId String?
+
+  @@map("setores")
 }
 
-model CheckItemPrisma {
-  id        String   @default(uuid())
-  nome      String
-  checked   Boolean
+model UsuarioSetorPrisma {
+  usuarioId String
+  setorerId String
   createdAt DateTime @default(now()) @db.Timestamptz(3)
 
-  checkList   CheckListPrisma @relation(fields: [checkListId], references: [id], onDelete: Cascade)
-  checkListId String
+  usuario UsuarioPrisma @relation(fields: [usuarioId], references: [id])
+  setor   SetorPrisma   @relation(fields: [setorerId], references: [id])
 
-  @@id([checkListId, id])
-  @@map("checkItem")
-}
-
-model UsuarioTarefaPrisma {
-  usuario   UsuarioPrisma @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
-  tarefa    TarefaPrisma  @relation(fields: [tarefaId], references: [id], onDelete: Cascade)
-  usuarioId String
-  tarefaId  String
-
-  @@id([usuarioId, tarefaId])
-  @@map("usuarioTarefa")
-}
-
-model UsuarioProjetoPrisma {
-  usuario     UsuarioPrisma @relation(fields: [usuarioId], references: [id])
-  projeto     ProjetoPrisma @relation(fields: [projetoId], references: [id], onDelete: Cascade)
-  tipoVinculo Int
-  usuarioId   String
-  projetoId   String
-
-  @@id([usuarioId, projetoId])
-  @@map("usuarioProjeto")
+  @@id([usuarioId, setorerId])
+  @@map("usuarios_setores")
 }

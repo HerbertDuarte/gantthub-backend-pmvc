@@ -24,8 +24,8 @@ import { DeletarUsuarioUseCase } from '../../../domain/application/usecases/usua
 import { PaginateUsuarioDto } from '../../../domain/application/dto/usuario/paginate-usuario.dto';
 import { AtualizaPerfilUsuarioDto } from '../../../domain/application/dto/usuario/atualiza-perfil.dto';
 import { AtualizarPerfilUsuarioUseCase } from '../../../domain/application/usecases/usuario/atualiza-perfil.usecase';
-import { Usuario } from '../../../domain/entity/usuario';
 import { JwtAuthGuard } from '../guard/jwt-auth.guard';
+import { UsuarioPrisma } from '@prisma/client';
 
 @ApiBearerAuth()
 @Controller('usuarios')
@@ -42,7 +42,7 @@ export class UsuarioController {
 
   @Post()
   @UseGuards(JwtAuthGuard)
-  async cria(@Body() dados: CriaUsuarioDto): Promise<Usuario> {
+  async cria(@Body() dados: CriaUsuarioDto): Promise<UsuarioPrisma> {
     return this.criarUsuarioUseCase.execute(dados);
   }
 
@@ -54,14 +54,14 @@ export class UsuarioController {
 
   @Get('/:id')
   @UseGuards(JwtAuthGuard)
-  async findById(@Param('id') id: string): Promise<Usuario> {
+  async findById(@Param('id') id: string): Promise<UsuarioPrisma> {
     return this.buscarPorIdUsuarioUseCase.execute(id);
   }
 
   @Get('/perfil')
   @UseGuards(JwtAuthGuard)
   async getPerfil(@Req() req: Request) {
-    const userId = req.user.getId();
+    const userId = req.user.id;
     return this.buscarPorIdUsuarioUseCase.execute(userId);
   }
 
@@ -71,7 +71,7 @@ export class UsuarioController {
     @Body() data: AtualizaPerfilUsuarioDto,
     @Req() req: Request,
   ): Promise<void> {
-    const userId = req.user.getId();
+    const userId = req.user.id;
     return this.atualizaPerfilUsuarioUseCase.execute(userId, data);
   }
 }

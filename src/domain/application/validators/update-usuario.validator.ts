@@ -3,7 +3,7 @@ import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { AtualizaUsuarioDto } from '../dto/usuario/atualiza-usuario.dto';
 import { EmailJaCadastradoValidator } from './email-ja-cadastrado.validator';
 import { LoginJaCadastradoValidator } from './login-ja-cadastrado.validator';
-import { Usuario } from '../../entity/usuario';
+import { UsuarioPrisma } from '@prisma/client';
 
 @Injectable()
 export class UpdateUsuarioValidator {
@@ -13,17 +13,17 @@ export class UpdateUsuarioValidator {
     private readonly loginJaCadastradoValidator: LoginJaCadastradoValidator,
   ) {}
 
-  async validate(usuario: Usuario, data: AtualizaUsuarioDto) {
+  async validate(usuario: UsuarioPrisma, data: AtualizaUsuarioDto) {
     if (!usuario) {
       this.logger.error('Usuario não existe.');
       throw new NotFoundException('Usuario não existe');
     }
 
-    if (usuario.getEmail() !== data.email) {
+    if (usuario.email !== data.email) {
       await this.emailJaCadastradoValidator.validate(data.email);
     }
 
-    if (usuario.getLogin() !== data.login) {
+    if (usuario.login !== data.login) {
       await this.loginJaCadastradoValidator.validate(data.login);
     }
   }

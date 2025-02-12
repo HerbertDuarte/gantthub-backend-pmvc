@@ -7,10 +7,11 @@ import { UpdateUsuarioValidator } from '../../validators/update-usuario.validato
 import { AtualizaPerfilUsuarioDto } from '../../dto/usuario/atualiza-perfil.dto';
 import { SenhaValidaValidator } from '../../validators/senha-valida.validator';
 import { CriaUsuarioDto } from '../../dto/usuario/cria-usuario.dto';
-import { Usuario } from '../../../entity/usuario';
+import { UsuarioPrisma } from '@prisma/client';
+import { UsuarioPrismaBuilder } from '@/src/infrastructure/builder/usuario-prisma.builder';
 
 @Injectable()
-export class AtualizarPerfilUsuarioUseCase implements UseCase<Usuario> {
+export class AtualizarPerfilUsuarioUseCase implements UseCase<UsuarioPrisma> {
   constructor(
     private readonly usuarioRepository: UsuarioPrismaRepository,
     private readonly updateUsuarioValidator: UpdateUsuarioValidator,
@@ -35,14 +36,14 @@ export class AtualizarPerfilUsuarioUseCase implements UseCase<Usuario> {
       atualizaUsuarioPayload,
     );
 
-    const usuario = new Usuario({
-      id: usuarioExists.getId(),
-      email: usuarioExists.getEmail(),
-      nome: usuarioExists.getNome(),
-      login: usuarioExists.getLogin(),
-      createdAt: usuarioExists.getCreatedAt(),
-      senha: usuarioExists.getSenha(),
-      situacao: usuarioExists.getSituacao(),
+    const usuario = UsuarioPrismaBuilder.build({
+      id: usuarioExists.id,
+      email: usuarioExists.email,
+      nome: usuarioExists.nome,
+      login: usuarioExists.login,
+      createdAt: usuarioExists.createdAt,
+      senha: usuarioExists.senha,
+      situacao: usuarioExists.situacao,
       ...atualizaUsuarioPayload,
     });
 

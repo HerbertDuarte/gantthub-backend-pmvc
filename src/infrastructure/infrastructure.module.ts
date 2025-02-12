@@ -21,12 +21,7 @@ import { AuthController } from './adapter/controller/auth.controller';
 import { LocalStrategy } from './adapter/strategy/local.strategy';
 import { JwtStrategy } from './adapter/strategy/jwt.strategy';
 import { UsuarioController } from './adapter/controller/usuario.controller';
-import { ProjetoController } from './adapter/controller/projeto.controller.';
-import { ProjetoPrismaRepository } from './repository/projeto-prisma.repository';
-import { TarefaController } from './adapter/controller/tarefa.controller';
-import { TarefaPrismaRepository } from './repository/tarefa-prisma.repository';
-import { MarcoController } from './adapter/controller/marco.controller';
-import { MarcoPrismaRepository } from './repository/marco-prisma.repository';
+import { ProjetoModule } from './module/projeto.module';
 
 const usecases: Provider[] = [
   LoginService,
@@ -38,12 +33,7 @@ const usecases: Provider[] = [
   AtualizarPerfilUsuarioUseCase,
 ];
 
-const repositories: Provider[] = [
-  UsuarioPrismaRepository,
-  ProjetoPrismaRepository,
-  TarefaPrismaRepository,
-  MarcoPrismaRepository,
-];
+const repositories: Provider[] = [UsuarioPrismaRepository];
 const validators: Provider[] = [
   EmailJaCadastradoValidator,
   LoginJaCadastradoValidator,
@@ -64,6 +54,7 @@ const providers: Provider[] = [
 
 @Module({
   imports: [
+    ProjetoModule,
     PassportModule.register({ defaultStrategy: 'jwt' }),
     DatabaseModule,
     JwtModule.registerAsync({
@@ -75,13 +66,7 @@ const providers: Provider[] = [
       inject: [ConfigService],
     }),
   ],
-  controllers: [
-    AuthController,
-    UsuarioController,
-    ProjetoController,
-    TarefaController,
-    MarcoController,
-  ],
+  controllers: [AuthController, UsuarioController],
   providers,
   exports: providers,
 })

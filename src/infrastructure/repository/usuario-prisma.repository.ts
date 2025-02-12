@@ -2,83 +2,68 @@ import { PrismaService } from '@/src/infrastructure/plugins/database/services/pr
 import { Injectable } from '@nestjs/common';
 import { PaginateResponse, PaginateUtil } from 'lib-test-herbert';
 import { randomUUID } from 'crypto';
-
 import { PaginateUsuarioDto } from '../../domain/application/dto/usuario/paginate-usuario.dto';
-import { IUsuarioRepository } from '../../domain/repository/usuario.respository';
-import { Usuario } from '../../domain/entity/usuario';
-import { UsuarioMapper } from '../mapper/usuario.mapper';
+import { UsuarioPrisma } from '@prisma/client';
 
 @Injectable()
-export class UsuarioPrismaRepository implements IUsuarioRepository {
+export class UsuarioPrismaRepository {
   constructor(private readonly prismaService: PrismaService) {}
 
-  async cria(usuario: Usuario): Promise<Usuario> {
-    await this.prismaService.usuarioPrisma.create({
-      data: UsuarioMapper.toPersistence(usuario),
-    });
-
-    return usuario;
+  async cria(usuario: UsuarioPrisma): Promise<UsuarioPrisma> {
+    return this.prismaService.usuarioPrisma.create({ data: usuario });
   }
-  async findAll(props: PaginateUsuarioDto): Promise<PaginateResponse<Usuario>> {
-    const { busca, pagina, itensPorPagina } = props;
-    const paginateUtil = new PaginateUtil<Usuario>(this.prismaService);
+  async findAll(
+    props: PaginateUsuarioDto,
+  ): Promise<PaginateResponse<UsuarioPrisma>> {
+    const { busca, pagina, itensPorPagina, situacao } = props;
+    const paginateUtil = new PaginateUtil<UsuarioPrisma>(this.prismaService);
 
     return paginateUtil.execute({
       module: 'usuarioPrisma',
       busca,
       pagina,
       itensPorPagina,
+      queries: { situacao },
     });
   }
 
-  async findByEmail(email: string): Promise<Usuario> {
-    const usuario = await this.prismaService.usuarioPrisma.findUnique({
+  async findByEmail(email: string): Promise<UsuarioPrisma> {
+    return this.prismaService.usuarioPrisma.findUnique({
       where: {
         email,
       },
     });
-    return UsuarioMapper.toDomain(usuario);
   }
-  async findById(id: string): Promise<Usuario> {
+  async findById(id: string): Promise<UsuarioPrisma> {
     const usuario = await this.prismaService.usuarioPrisma.findUnique({
       where: {
         id,
       },
     });
-
-    return UsuarioMapper.toDomain(usuario);
+    if (!usuario) return null;
+    return usuario;
   }
-  async findByLogin(login: string): Promise<Usuario> {
+  async findByLogin(login: string): Promise<UsuarioPrisma> {
     const usuario = await this.prismaService.usuarioPrisma.findUnique({
       where: {
-        login: login,
+        login,
       },
     });
-
-    return UsuarioMapper.toDomain(usuario);
+    if (!usuario) return null;
+    return usuario;
   }
 
-  async findBySenha(senha: string): Promise<Usuario> {
-    const usuario = await this.prismaService.usuarioPrisma.findFirst({
-      where: {
-        senha,
-      },
-    });
-
-    return UsuarioMapper.toDomain(usuario);
-  }
-
-  async findByRefreshToken(refreshToken: string): Promise<Usuario> {
+  async findByRefreshToken(refreshToken: string): Promise<UsuarioPrisma> {
     const usuario = await this.prismaService.usuarioPrisma.findFirst({
       where: {
         refreshToken,
       },
     });
-
-    return UsuarioMapper.toDomain(usuario);
+    if (!usuario) return null;
+    return usuario;
   }
 
-  async updateRefreshToken(usuarioId: string): Promise<Usuario> {
+  async updateRefreshToken(usuarioId: string): Promise<UsuarioPrisma> {
     const usuario = await this.findById(usuarioId);
     if (!usuario) return null;
 
@@ -93,18 +78,21 @@ export class UsuarioPrismaRepository implements IUsuarioRepository {
       },
     });
 
-    return UsuarioMapper.toDomain(usuarioPrisma);
+    if (!usuarioPrisma) return null;
+    return usuarioPrisma;
   }
 
-  async atualiza(id: string, entity: Usuario): Promise<Usuario> {
-    const usuario = await this.prismaService.usuarioPrisma.update({
+  async atualiza(id: string, entity: UsuarioPrisma): Promise<UsuarioPrisma> {
+    const usuarioExists = await this.findById(id);
+    if (!usuarioExists) {
+      throw new Error('Usuário não existe');
+    }
+    return this.prismaService.usuarioPrisma.update({
       where: {
         id,
       },
-      data: UsuarioMapper.toPersistence(entity),
+      data: entity,
     });
-
-    return UsuarioMapper.toDomain(usuario);
   }
 
   async deleta(id: string): Promise<void | any> {
@@ -113,7 +101,5 @@ export class UsuarioPrismaRepository implements IUsuarioRepository {
         id,
       },
     });
-
-    return;
   }
 }
