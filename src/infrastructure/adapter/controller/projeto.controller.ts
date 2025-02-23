@@ -1,45 +1,49 @@
-import { Controller, Get, NotFoundException, Param } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  NotFoundException,
+  Param,
+  Query,
+} from '@nestjs/common';
 import { PrismaService } from '../../plugins/database/services/prisma.service';
+import { ProjetoPrisma } from '@prisma/client';
+import { PaginateResponse, PaginateUtil } from 'lib-test-herbert';
+import { PaginateProjetoDto } from '@/src/domain/application/dto/projeto/paginate-projeto.dto';
 
 @Controller('projeto')
 export class ProjetoController {
   constructor(private readonly prisma: PrismaService) {}
 
   @Get()
-  async findAll() {
-    return this.prisma.projetoPrisma.findMany();
+  async findAll(
+    @Query() props?: PaginateProjetoDto,
+  ): Promise<PaginateResponse<ProjetoPrisma>> {
+    const { busca, pagina, itensPorPagina } = props;
+    const paginateUtil = new PaginateUtil<ProjetoPrisma>(this.prisma);
+
+    return paginateUtil.execute({
+      module: 'projetoPrisma',
+      busca,
+      pagina,
+      itensPorPagina,
+      queries: {},
+    });
   }
 
   @Get(':id')
-  async findOne(@Param('id') id: string) {
-    console.log(id);
-
-    const projeto = await this.prisma.projetoPrisma.findFirst({
+  async findOne(@Param('id') projetoId: string) {
+    const projeto = await this.prisma.projetoPrisma.findUnique({
+      where: {
+        id: projetoId,
+      },
       include: {
         marcos: {
           include: {
-            tarefas: {
-              include: {
-                tarefas: {
-                  include: {
-                    tarefas: {
-                      include: {
-                        tarefas: {
-                          include: {
-                            tarefas: true,
-                          },
-                        },
-                      },
-                    },
-                  },
-                },
-              },
-            },
+            tarefas: true,
           },
         },
       },
     });
-    console.log(projeto);
     if (!projeto) {
       throw new NotFoundException('Projeto não encontrado');
     }
