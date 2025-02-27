@@ -8,18 +8,19 @@ datasource db {
 }
 
 model UsuarioPrisma {
-  id           String               @id @default(uuid())
-  nome         String
-  email        String               @unique
-  situacao     Int                  @default(1) // 1 - Ativo, 2 - Inativo
-  login        String               @unique
-  role         Int                  @default(1) // 1 - Usuario, 2 - Admin, 3 - Master
-  refreshToken String?
-  senha        String
-  imageUrl     String?
-  createdAt    DateTime             @default(now()) @db.Timestamptz(3)
-  setores      UsuarioSetorPrisma[]
-  tarefas      TarefaPrisma[]
+  id            String               @id @default(uuid())
+  nome          String
+  email         String               @unique
+  situacao      Int                  @default(1) // 1 - Ativo, 2 - Inativo
+  login         String               @unique
+  role          Int                  @default(1) // 1 - Usuario, 2 - Admin, 3 - Master
+  refreshToken  String?
+  senha         String
+  imageUrl      String?
+  createdAt     DateTime             @default(now()) @db.Timestamptz(3)
+  setores       UsuarioSetorPrisma[]
+  tarefas       TarefaPrisma[]
+  ProjetoPrisma ProjetoPrisma[]
 
   @@map("usuarios")
 }
@@ -30,7 +31,9 @@ model ProjetoPrisma {
   descricao String?
   marcos    MarcoPrisma[]
 
-  createdAt DateTime @default(now()) @db.Timestamptz(3)
+  createdBy   UsuarioPrisma @relation(fields: [createdById], references: [id])
+  createdById String        @default("1d52e4f9-ce43-48a6-b0fd-78bf5470c22f")
+  createdAt   DateTime      @default(now()) @db.Timestamptz(3)
 
   @@map("projetos")
 }

@@ -22,6 +22,8 @@ import { LocalStrategy } from './adapter/strategy/local.strategy';
 import { JwtStrategy } from './adapter/strategy/jwt.strategy';
 import { UsuarioController } from './adapter/controller/usuario.controller';
 import { ProjetoModule } from './module/projeto.module';
+import { MarcoModule } from './module/marco.module';
+import { TarefaModule } from './module/tarefa.module';
 
 const usecases: Provider[] = [
   LoginService,
@@ -55,6 +57,8 @@ const providers: Provider[] = [
 @Module({
   imports: [
     ProjetoModule,
+    MarcoModule,
+    TarefaModule,
     PassportModule.register({ defaultStrategy: 'jwt' }),
     DatabaseModule,
     JwtModule.registerAsync({

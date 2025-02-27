@@ -38,6 +38,9 @@ export class ProjetoController {
       orderBy: {
         nome: 'asc',
       },
+      include: {
+        createdBy: true,
+      },
     });
   }
 
@@ -51,7 +54,11 @@ export class ProjetoController {
       include: {
         marcos: {
           include: {
-            tarefas: true,
+            tarefas: {
+              include: {
+                usuario: true,
+              },
+            },
           },
         },
       },

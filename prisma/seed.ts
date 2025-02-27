@@ -11,6 +11,7 @@ async function main() {
       situacao: 1,
       login: 'admin',
       senha: '$2b$10$3JEcQYwkwgtT1sM0pwQn.eLRfDYZQR1YVP3JGZr.d0VCkog6YQ3oe',
+      id: '1d52e4f9-ce43-48a6-b0fd-78bf5470c22f',
     },
   });
 }

@@ -9,14 +9,13 @@ import {
   Put,
   Query,
   Req,
+  BadRequestException,
 } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { Request } from 'express';
 import { AtualizarUsuarioUseCase } from '@/src/domain/application/usecases/usuario/atualizar-usuario.usecase';
 import { BuscarPorIdUsuarioUseCase } from '@/src/domain/application/usecases/usuario/buscar-por-id-usuario.usecase';
 import { BuscarUsuariosPaginacaoUseCase } from '@/src/domain/application/usecases/usuario/buscar-usuarios-paginacao.usecase';
-
 import { AtualizaUsuarioDto } from '../../../domain/application/dto/usuario/atualiza-usuario.dto';
 import { CriaUsuarioDto } from '../../../domain/application/dto/usuario/cria-usuario.dto';
 import { CriarUsuarioUseCase } from '../../../domain/application/usecases/usuario/criar-usuario.usecase';
@@ -73,5 +72,20 @@ export class UsuarioController {
   ): Promise<void> {
     const userId = req.user.id;
     return this.atualizaPerfilUsuarioUseCase.execute(userId, data);
+  }
+
+  @Delete('/:id')
+  @UseGuards(JwtAuthGuard)
+  async deleta(@Param('id') id: string, @Req() req: Request): Promise<void> {
+    if (req.user.id === id) {
+      throw new BadRequestException('Não é possível deletar o próprio usuário');
+    }
+    return this.deletarUsuarioUseCase.execute(id);
+  }
+
+  @Put('/:id')
+  @UseGuards(JwtAuthGuard)
+  async atualiza(@Param('id') id: string, @Body() data: AtualizaUsuarioDto) {
+    return this.atualizarUsuarioUseCase.execute(id, data);
   }
 }
