@@ -14,7 +14,6 @@ import { UpdateUsuarioValidator } from '@/src/domain/application/validators/upda
 import { AtualizarUsuarioUseCase } from '@/src/domain/application/usecases/usuario/atualizar-usuario.usecase';
 import { BuscarPorIdUsuarioUseCase } from '@/src/domain/application/usecases/usuario/buscar-por-id-usuario.usecase';
 import { BuscarUsuariosPaginacaoUseCase } from '@/src/domain/application/usecases/usuario/buscar-usuarios-paginacao.usecase';
-
 import { DatabaseModule } from './plugins/database/database.module';
 import { UsuarioPrismaRepository } from './repository/usuario-prisma.repository';
 import { AuthController } from './adapter/controller/auth.controller';
