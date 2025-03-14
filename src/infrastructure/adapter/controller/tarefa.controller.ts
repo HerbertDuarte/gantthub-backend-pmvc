@@ -13,12 +13,15 @@ import {
 import { PrismaService } from '../../plugins/database/services/prisma.service';
 import { TarefaPrisma } from '@prisma/client';
 import { JwtAuthGuard } from '../guard/jwt-auth.guard';
-import { TarefaStatusEnum } from '@/src/domain/enum/tarefa-status.enum';
-import { isBefore, startOfDay } from 'date-fns';
+
+import { AtualizaStatusTarefaUsecase } from '@/src/domain/application/usecases/tarefa/atualiza-status-tarefa.usecase';
 
 @Controller('tarefa')
 export class TarefaController {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly atualizaStatusTarefaUsecase: AtualizaStatusTarefaUsecase,
+  ) {}
 
   @Get(':id')
   @UseGuards(JwtAuthGuard)
@@ -69,8 +72,15 @@ export class TarefaController {
     @Body() body: Partial<TarefaPrisma>,
     @Param('id') tarefaId: string,
   ) {
-    const { dataFim, dataInicio, descricao, nome, status } = body;
-    const values = { dataFim, dataInicio, descricao, nome, status };
+    const { dataFim, dataInicio, descricao, nome, status, justificativa } =
+      body;
+    const values = { dataFim, dataInicio, descricao, nome };
+
+    await this.atualizaStatusTarefaUsecase.execute(
+      { status, justificativa },
+      tarefaId,
+    );
+
     const tarefaExists = await this.prisma.tarefaPrisma.findUnique({
       where: {
         id: tarefaId,
@@ -94,37 +104,13 @@ export class TarefaController {
   @Patch(':id/status')
   @UseGuards(JwtAuthGuard)
   async udpateStatus(
-    @Body() { status }: Partial<TarefaPrisma>,
+    @Body() { status, justificativa }: Partial<TarefaPrisma>,
     @Param('id') tarefaId: string,
   ) {
-    const tarefaExists = await this.prisma.tarefaPrisma.findUnique({
-      where: {
-        id: tarefaId,
-      },
-    });
-
-    if (!tarefaExists) {
-      throw new NotFoundException('Tarefa não encontrado');
-    }
-
-    if (status === TarefaStatusEnum.CONCLUIDA) {
-      const isPastDue = isBefore(
-        startOfDay(tarefaExists.dataFim),
-        startOfDay(new Date()),
-      );
-      if (isPastDue) {
-        status = TarefaStatusEnum.CONCLUIDA_COM_ATRASO;
-      }
-    }
-
-    return this.prisma.tarefaPrisma.update({
-      where: {
-        id: tarefaId,
-      },
-      data: {
-        status,
-      },
-    });
+    return this.atualizaStatusTarefaUsecase.execute(
+      { status, justificativa },
+      tarefaId,
+    );
   }
 
   @Delete(':id')

@@ -51,13 +51,14 @@ model MarcoPrisma {
 }
 
 model TarefaPrisma {
-  id         String   @id @default(uuid())
-  nome       String
-  descricao  String
-  dataInicio DateTime
-  dataFim    DateTime
-  status     Int // 1 - Nao iniciado, 2 - Em andamento, 3 - Concluido, 4 - Concluido com atraso, 5 - Cancelado
-  createdAt  DateTime @default(now()) @db.Timestamptz(3)
+  id            String   @id @default(uuid())
+  nome          String
+  descricao     String
+  dataInicio    DateTime
+  dataFim       DateTime
+  status        Int // 1 - Nao iniciado, 2 - Em andamento, 3 - Concluido, 4 - Concluido com atraso, 5 - Cancelado
+  createdAt     DateTime @default(now()) @db.Timestamptz(3)
+  justificativa String?
 
   usuario   UsuarioPrisma @relation(fields: [usuarioId], references: [id])
   usuarioId String
