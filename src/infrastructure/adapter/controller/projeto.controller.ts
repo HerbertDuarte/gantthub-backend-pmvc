@@ -57,6 +57,9 @@ export class ProjetoController {
             tarefas: {
               include: {
                 usuario: true,
+                subTarefas: {
+                  include: { usuario: true },
+                },
               },
             },
           },

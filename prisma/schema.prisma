@@ -8,19 +8,20 @@ datasource db {
 }
 
 model UsuarioPrisma {
-  id            String               @id @default(uuid())
-  nome          String
-  email         String               @unique
-  situacao      Int                  @default(1) // 1 - Ativo, 2 - Inativo
-  login         String               @unique
-  role          Int                  @default(1) // 1 - Usuario, 2 - Admin, 3 - Master
-  refreshToken  String?
-  senha         String
-  imageUrl      String?
-  createdAt     DateTime             @default(now()) @db.Timestamptz(3)
-  setores       UsuarioSetorPrisma[]
-  tarefas       TarefaPrisma[]
-  ProjetoPrisma ProjetoPrisma[]
+  id           String               @id @default(uuid())
+  nome         String
+  email        String               @unique
+  situacao     Int                  @default(1)
+  login        String               @unique
+  role         Int                  @default(1)
+  refreshToken String?
+  senha        String
+  imageUrl     String?
+  createdAt    DateTime             @default(now()) @db.Timestamptz(3)
+  setores      UsuarioSetorPrisma[]
+  tarefas      TarefaPrisma[]
+  projetos     ProjetoPrisma[]
+  subTarefas   SubTarefaPrisma[]
 
   @@map("usuarios")
 }
@@ -56,22 +57,37 @@ model TarefaPrisma {
   descricao     String
   dataInicio    DateTime
   dataFim       DateTime
-  status        Int // 1 - Nao iniciado, 2 - Em andamento, 3 - Concluido, 4 - Concluido com atraso, 5 - Cancelado
+  status        Int
   createdAt     DateTime @default(now()) @db.Timestamptz(3)
   justificativa String?
 
   usuario   UsuarioPrisma @relation(fields: [usuarioId], references: [id])
   usuarioId String
 
-  tarefaPai   TarefaPrisma? @relation("TarefaPai", fields: [tarefaPaiId], references: [id])
-  tarefaPaiId String?
-
-  tarefas TarefaPrisma[] @relation("TarefaPai")
-
-  marco   MarcoPrisma @relation(fields: [marcoId], references: [id], onDelete: Cascade)
-  marcoId String
+  marco      MarcoPrisma       @relation(fields: [marcoId], references: [id], onDelete: Cascade)
+  marcoId    String
+  subTarefas SubTarefaPrisma[]
 
   @@map("tarefas")
+}
+
+model SubTarefaPrisma {
+  id            String   @id @default(uuid())
+  nome          String
+  descricao     String
+  dataInicio    DateTime
+  dataFim       DateTime
+  status        Int
+  createdAt     DateTime @default(now()) @db.Timestamptz(3)
+  justificativa String?
+
+  usuario   UsuarioPrisma @relation(fields: [usuarioId], references: [id])
+  usuarioId String
+
+  tarefaPai   TarefaPrisma @relation(fields: [tarefaPaiId], references: [id], onDelete: Cascade)
+  tarefaPaiId String
+
+  @@map("sub_tarefas")
 }
 
 model SetorPrisma {
@@ -80,10 +96,6 @@ model SetorPrisma {
   createdAt DateTime @default(now()) @db.Timestamptz(3)
 
   usuarios UsuarioSetorPrisma[]
-
-  setores    SetorPrisma[] @relation("SetorPai")
-  setorPai   SetorPrisma?  @relation("SetorPai", fields: [setorPaiId], references: [id])
-  setorPaiId String?
 
   @@map("setores")
 }

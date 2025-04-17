@@ -23,6 +23,7 @@ import { UsuarioController } from './adapter/controller/usuario.controller';
 import { ProjetoModule } from './module/projeto.module';
 import { MarcoModule } from './module/marco.module';
 import { TarefaModule } from './module/tarefa.module';
+import { SubTarefaModule } from './module/subtarefa.module';
 
 const usecases: Provider[] = [
   LoginService,
@@ -58,6 +59,7 @@ const providers: Provider[] = [
     ProjetoModule,
     MarcoModule,
     TarefaModule,
+    SubTarefaModule,
     PassportModule.register({ defaultStrategy: 'jwt' }),
     DatabaseModule,
     JwtModule.registerAsync({
