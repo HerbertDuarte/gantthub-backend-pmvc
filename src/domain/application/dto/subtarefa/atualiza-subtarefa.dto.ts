@@ -1,4 +1,4 @@
-export class AtualizaSubTarefaDto {
+export interface AtualizaSubTarefaDto {
   nome?: string;
   dataFim?: Date;
   dataInicio?: Date;

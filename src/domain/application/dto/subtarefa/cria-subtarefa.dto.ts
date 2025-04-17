@@ -1,4 +1,4 @@
-export class CriaSubTarefaDto {
+export interface CriaSubTarefaDto {
   nome: string;
   dataFim: Date;
   dataInicio: Date;

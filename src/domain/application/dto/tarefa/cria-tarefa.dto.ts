@@ -1,4 +1,4 @@
-export class CriaTarefaDto {
+export interface CriaTarefaDto {
   nome: string;
   dataFim: Date;
   dataInicio: Date;

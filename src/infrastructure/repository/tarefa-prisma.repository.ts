@@ -7,7 +7,22 @@ export class TarefaPrismaRepository {
   constructor(private readonly prismaService: PrismaService) {}
 
   async create(tarefa: TarefaPrisma): Promise<TarefaPrisma> {
-    return this.prismaService.tarefaPrisma.create({ data: tarefa });
+    const { usuarioId, marcoId, ...tarefaData } = tarefa;
+    return this.prismaService.tarefaPrisma.create({
+      data: {
+        ...tarefaData,
+        usuario: {
+          connect: {
+            id: usuarioId,
+          },
+        },
+        marco: {
+          connect: {
+            id: marcoId,
+          },
+        },
+      },
+    });
   }
 
   async findById(id: string): Promise<TarefaPrisma> {

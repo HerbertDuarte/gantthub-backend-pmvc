@@ -1,3 +1,3 @@
-export class AtualizaMarcoDto {
+export interface AtualizaMarcoDto {
   nome?: string;
 }

@@ -97,17 +97,22 @@ model SetorPrisma {
 
   usuarios UsuarioSetorPrisma[]
 
+  // Relações para hierarquia de setores
+  subSetores SetorPrisma[] @relation("SubSetores")
+  setorPai   SetorPrisma?  @relation("SubSetores", fields: [setorPaiId], references: [id], onDelete: Cascade)
+  setorPaiId String?
+
   @@map("setores")
 }
 
 model UsuarioSetorPrisma {
   usuarioId String
-  setorerId String
+  setorId   String
   createdAt DateTime @default(now()) @db.Timestamptz(3)
 
   usuario UsuarioPrisma @relation(fields: [usuarioId], references: [id])
-  setor   SetorPrisma   @relation(fields: [setorerId], references: [id])
+  setor   SetorPrisma   @relation(fields: [setorId], references: [id])
 
-  @@id([usuarioId, setorerId])
+  @@id([usuarioId, setorId])
   @@map("usuarios_setores")
 }

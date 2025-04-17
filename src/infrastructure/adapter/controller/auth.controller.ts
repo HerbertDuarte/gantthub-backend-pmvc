@@ -16,10 +16,6 @@ export class AuthController {
 
   @UseGuards(LocalAuthGuard)
   @Post('login')
-  @ApiBody({
-    description: 'Dados para login',
-    type: AutenticaUsuarioDto,
-  })
   async login(@Req() req: Request) {
     this.logger.debug('Login realizado no sistema!');
     return this.loginService.execute(req);

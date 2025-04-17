@@ -34,8 +34,8 @@ export class MarcoController {
 
   @Post()
   @UseGuards(JwtAuthGuard)
-  async create(@Body() dados: CriaMarcoDto): Promise<MarcoPrisma> {
-    return this.criarMarcoUseCase.execute(dados);
+  async create(@Body() body: CriaMarcoDto): Promise<MarcoPrisma> {
+    return this.criarMarcoUseCase.execute(body);
   }
 
   @Patch(':id')

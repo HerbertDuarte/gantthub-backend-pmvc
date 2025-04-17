@@ -1,4 +1,4 @@
-export class CriaMarcoDto {
+export interface CriaMarcoDto {
   nome: string;
   projetoId: string;
 }

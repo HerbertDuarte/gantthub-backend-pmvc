@@ -10,7 +10,7 @@ export class TarefaPrismaBuilder {
       nome: data.nome,
       dataInicio: data.dataInicio,
       dataFim: data.dataFim,
-      descricao: data.descricao || null,
+      descricao: data.descricao || '',
       status: data.status,
       justificativa: null,
       usuarioId: data.usuarioId,
