@@ -6,6 +6,7 @@ import {
   Param,
   Post,
   Put,
+  Query,
   UseGuards,
 } from '@nestjs/common';
 import { SetorPrisma } from '@prisma/client';
@@ -17,8 +18,10 @@ import { DeletarSetorUseCase } from '@/src/domain/application/usecases/setor/del
 import { CriaSetorDto } from '@/src/domain/application/dto/setor/cria-setor.dto';
 import { AtualizaSetorDto } from '@/src/domain/application/dto/setor/atualiza-setor.dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { SetorPrismaRepository } from '@/src/infrastructure/repository/setor-prisma.repository';
 import { ListarSetoresUseCase } from '@/src/domain/application/usecases/setor/listar-setores.usecase';
+import { SetorPrismaExtended } from '../../repository/setor-prisma.repository';
+import { PaginateResponse } from 'lib-test-herbert';
+import { PaginateSetorDto } from '@/src/domain/application/dto/setor/paginate-setor.dto';
 
 @ApiBearerAuth()
 @Controller('setor')
@@ -34,8 +37,10 @@ export class SetorController {
 
   @Get()
   @UseGuards(JwtAuthGuard)
-  async findAll(): Promise<SetorPrisma[]> {
-    return this.listarSetoresUseCase.execute();
+  async findAll(
+    @Query() queryPrams?: PaginateSetorDto,
+  ): Promise<PaginateResponse<SetorPrismaExtended>> {
+    return this.listarSetoresUseCase.execute(queryPrams);
   }
 
   @Get(':id')

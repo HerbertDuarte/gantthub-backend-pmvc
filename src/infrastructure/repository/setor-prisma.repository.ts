@@ -1,8 +1,21 @@
+import { PaginateSetorDto } from '@/src/domain/application/dto/setor/paginate-setor.dto';
 import { PrismaService } from '@/src/infrastructure/plugins/database/services/prisma.service';
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { SetorPrisma } from '@prisma/client';
+import {
+  ProjetoPrisma,
+  ProjetoSetorPrisma,
+  SetorPrisma,
+  UsuarioPrisma,
+  UsuarioSetorPrisma,
+} from '@prisma/client';
+import { PaginateResponse, PaginateUtil } from 'lib-test-herbert';
 
-export type SetorPrismaExtended = SetorPrisma & { subSetores: SetorPrisma[] };
+export type SetorPrismaExtended = SetorPrisma & {
+  subSetores: SetorPrisma[];
+  setorPai: SetorPrisma;
+  usuariosSetores: UsuarioSetorPrisma & { usuario: UsuarioPrisma };
+  projetosSetores: ProjetoSetorPrisma & { projeto: ProjetoPrisma };
+};
 
 @Injectable()
 export class SetorPrismaRepository {
@@ -52,7 +65,7 @@ export class SetorPrismaRepository {
       await this.sincronizarUsuariosComSubsetores(novoSetor.setorPaiId);
     }
 
-    return novoSetor;
+    return novoSetor as unknown as SetorPrismaExtended;
   }
 
   async findById(id: string): Promise<SetorPrismaExtended> {
@@ -61,9 +74,14 @@ export class SetorPrismaRepository {
       include: {
         setorPai: true,
         subSetores: true,
-        usuarios: {
+        usuariosSetores: {
           include: {
             usuario: true,
+          },
+        },
+        projetosSetores: {
+          include: {
+            projeto: true,
           },
         },
       },
@@ -73,20 +91,38 @@ export class SetorPrismaRepository {
       throw new NotFoundException('Setor não encontrado');
     }
 
-    return setor;
+    return setor as unknown as SetorPrismaExtended;
   }
 
-  async findAll(): Promise<SetorPrismaExtended[]> {
-    return this.prismaService.setorPrisma.findMany({
+  async findAll({
+    itensPorPagina,
+    pagina,
+    busca,
+    setorPaiId,
+  }: PaginateSetorDto): Promise<PaginateResponse<SetorPrismaExtended>> {
+    const paginateUtil = new PaginateUtil<SetorPrismaExtended>(
+      this.prismaService,
+    );
+    return paginateUtil.execute({
+      module: 'setorPrisma',
+      busca,
+      pagina,
+      itensPorPagina,
       include: {
         setorPai: true,
         subSetores: true,
-        usuarios: {
+        usuariosSetores: {
           include: {
             usuario: true,
           },
         },
+        projetosSetores: {
+          include: {
+            projeto: true,
+          },
+        },
       },
+      queries: { setorPaiId },
     });
   }
 
@@ -109,7 +145,7 @@ export class SetorPrismaRepository {
       await this.sincronizarUsuariosComSubsetores(data.setorPaiId);
     }
 
-    return setorAtualizado;
+    return setorAtualizado as SetorPrismaExtended;
   }
 
   async delete(id: string): Promise<void> {

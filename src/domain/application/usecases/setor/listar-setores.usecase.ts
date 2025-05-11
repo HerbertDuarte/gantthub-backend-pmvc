@@ -1,13 +1,18 @@
 import { Injectable } from '@nestjs/common';
-import { UseCase } from '@/src/core/interfaces/usecase.interface';
-import { SetorPrisma } from '@prisma/client';
-import { SetorPrismaRepository } from '@/src/infrastructure/repository/setor-prisma.repository';
+import {
+  SetorPrismaExtended,
+  SetorPrismaRepository,
+} from '@/src/infrastructure/repository/setor-prisma.repository';
+import { PaginateResponse } from 'lib-test-herbert';
+import { PaginateSetorDto } from '../../dto/setor/paginate-setor.dto';
 
 @Injectable()
-export class ListarSetoresUseCase implements UseCase<SetorPrisma[]> {
+export class ListarSetoresUseCase {
   constructor(private readonly repository: SetorPrismaRepository) {}
 
-  async execute(): Promise<SetorPrisma[]> {
-    return this.repository.findAll();
+  async execute(
+    props: PaginateSetorDto,
+  ): Promise<PaginateResponse<SetorPrismaExtended>> {
+    return this.repository.findAll(props);
   }
 }
