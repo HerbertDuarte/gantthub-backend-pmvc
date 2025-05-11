@@ -13,8 +13,8 @@ import { PaginateResponse, PaginateUtil } from 'lib-test-herbert';
 export type SetorPrismaExtended = SetorPrisma & {
   subSetores: SetorPrisma[];
   setorPai: SetorPrisma;
-  usuariosSetores: UsuarioSetorPrisma & { usuario: UsuarioPrisma };
-  projetosSetores: ProjetoSetorPrisma & { projeto: ProjetoPrisma };
+  usuariosSetores: (UsuarioSetorPrisma & { usuario: UsuarioPrisma })[];
+  projetosSetores: (ProjetoSetorPrisma & { projeto: ProjetoPrisma })[];
 };
 
 @Injectable()
@@ -52,6 +52,128 @@ export class SetorPrismaRepository {
     }
   }
 
+  private async sincronizarUsuariosComSetoresPais(setorId: string) {
+    const setor = await this.prismaService.setorPrisma.findUnique({
+      where: { id: setorId },
+      select: { setorPaiId: true },
+    });
+
+    if (!setor || !setor.setorPaiId) {
+      return;
+    }
+
+    const usuariosDoSetor =
+      await this.prismaService.usuarioSetorPrisma.findMany({
+        where: { setorId },
+        select: { usuarioId: true },
+      });
+
+    for (const usuario of usuariosDoSetor) {
+      await this.prismaService.usuarioSetorPrisma.upsert({
+        where: {
+          usuarioId_setorId: {
+            usuarioId: usuario.usuarioId,
+            setorId: setor.setorPaiId,
+          },
+        },
+        create: {
+          usuarioId: usuario.usuarioId,
+          setorId: setor.setorPaiId,
+        },
+        update: {},
+      });
+    }
+
+    await this.sincronizarUsuariosComSetoresPais(setor.setorPaiId);
+  }
+
+  private async sincronizarProjetosComSubsetores(setorId: string) {
+    const projetosDoSetor =
+      await this.prismaService.projetoSetorPrisma.findMany({
+        where: { setorId },
+        select: { projetoId: true },
+      });
+
+    const subsetores = await this.prismaService.setorPrisma.findMany({
+      where: { setorPaiId: setorId },
+      select: { id: true },
+    });
+
+    for (const projeto of projetosDoSetor) {
+      for (const subsetor of subsetores) {
+        await this.prismaService.projetoSetorPrisma.upsert({
+          where: {
+            projetoId_setorId: {
+              projetoId: projeto.projetoId,
+              setorId: subsetor.id,
+            },
+          },
+          create: {
+            projetoId: projeto.projetoId,
+            setorId: subsetor.id,
+          },
+          update: {},
+        });
+      }
+    }
+  }
+
+  private async sincronizarProjetosComSetoresPais(setorId: string) {
+    const setor = await this.prismaService.setorPrisma.findUnique({
+      where: { id: setorId },
+      select: { setorPaiId: true },
+    });
+
+    if (!setor || !setor.setorPaiId) {
+      return;
+    }
+
+    const projetosDoSetor =
+      await this.prismaService.projetoSetorPrisma.findMany({
+        where: { setorId },
+        select: { projetoId: true },
+      });
+
+    for (const projeto of projetosDoSetor) {
+      await this.prismaService.projetoSetorPrisma.upsert({
+        where: {
+          projetoId_setorId: {
+            projetoId: projeto.projetoId,
+            setorId: setor.setorPaiId,
+          },
+        },
+        create: {
+          projetoId: projeto.projetoId,
+          setorId: setor.setorPaiId,
+        },
+        update: {},
+      });
+    }
+
+    await this.sincronizarProjetosComSetoresPais(setor.setorPaiId);
+  }
+
+  async findAllWithoutPaginate(): Promise<SetorPrismaExtended[]> {
+    return this.prismaService.setorPrisma.findMany({
+      orderBy: {
+        nome: 'asc',
+      },
+      include: {
+        setorPai: true,
+        subSetores: true,
+        usuariosSetores: {
+          include: {
+            usuario: true,
+          },
+        },
+        projetosSetores: {
+          include: {
+            projeto: true,
+          },
+        },
+      },
+    });
+  }
   async create(setor: SetorPrisma): Promise<SetorPrismaExtended> {
     const novoSetor = await this.prismaService.setorPrisma.create({
       data: setor,
@@ -63,6 +185,9 @@ export class SetorPrismaRepository {
 
     if (novoSetor.setorPaiId) {
       await this.sincronizarUsuariosComSubsetores(novoSetor.setorPaiId);
+      await this.sincronizarProjetosComSubsetores(novoSetor.setorPaiId);
+      await this.sincronizarUsuariosComSetoresPais(novoSetor.setorPaiId);
+      await this.sincronizarProjetosComSetoresPais(novoSetor.setorPaiId);
     }
 
     return novoSetor as unknown as SetorPrismaExtended;
@@ -126,30 +251,36 @@ export class SetorPrismaRepository {
     });
   }
 
-  async update(
-    id: string,
-    data: Partial<SetorPrisma>,
-  ): Promise<SetorPrismaExtended> {
+  async update(id: string, data: Partial<SetorPrisma>): Promise<void> {
     const setorExistente = await this.findById(id);
-
-    const setorAtualizado = await this.prismaService.setorPrisma.update({
+    await this.prismaService.setorPrisma.update({
       where: { id },
-      data,
-      include: {
-        setorPai: true,
-        subSetores: true,
+      data: {
+        nome: data.nome ?? setorExistente.nome,
+        setorPaiId: data.setorPaiId ?? setorExistente.setorPaiId,
       },
     });
 
     if (data.setorPaiId && data.setorPaiId !== setorExistente.setorPaiId) {
       await this.sincronizarUsuariosComSubsetores(data.setorPaiId);
+      await this.sincronizarProjetosComSubsetores(data.setorPaiId);
+      await this.sincronizarUsuariosComSetoresPais(data.setorPaiId);
+      await this.sincronizarProjetosComSetoresPais(data.setorPaiId);
     }
-
-    return setorAtualizado as SetorPrismaExtended;
   }
 
   async delete(id: string): Promise<void> {
-    await this.findById(id);
+    await this.prismaService.projetoSetorPrisma.deleteMany({
+      where: { setorId: id },
+    });
+    await this.prismaService.usuarioSetorPrisma.deleteMany({
+      where: { setorId: id },
+    });
+    await this.prismaService.setorPrisma.deleteMany({
+      where: {
+        setorPaiId: id,
+      },
+    });
     await this.prismaService.setorPrisma.delete({
       where: { id },
     });
@@ -164,6 +295,7 @@ export class SetorPrismaRepository {
     });
 
     await this.sincronizarUsuariosComSubsetores(setorId);
+    await this.sincronizarUsuariosComSetoresPais(setorId);
   }
 
   async removerUsuario(setorId: string, usuarioId: string): Promise<void> {
@@ -173,6 +305,32 @@ export class SetorPrismaRepository {
     await this.prismaService.usuarioSetorPrisma.deleteMany({
       where: {
         usuarioId,
+        setorId: {
+          in: [setorId, ...subsetoresIds],
+        },
+      },
+    });
+  }
+
+  async adicionarProjeto(setorId: string, projetoId: string): Promise<void> {
+    await this.prismaService.projetoSetorPrisma.create({
+      data: {
+        projetoId,
+        setorId,
+      },
+    });
+
+    await this.sincronizarProjetosComSubsetores(setorId);
+    await this.sincronizarProjetosComSetoresPais(setorId);
+  }
+
+  async removerProjeto(setorId: string, projetoId: string): Promise<void> {
+    const setor = await this.findById(setorId);
+    const subsetoresIds = setor.subSetores.map((s) => s.id);
+
+    await this.prismaService.projetoSetorPrisma.deleteMany({
+      where: {
+        projetoId,
         setorId: {
           in: [setorId, ...subsetoresIds],
         },

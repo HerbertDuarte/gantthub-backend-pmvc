@@ -7,6 +7,7 @@ import { BuscarPorIdSetorUseCase } from '@/src/domain/application/usecases/setor
 import { AtualizarSetorUseCase } from '@/src/domain/application/usecases/setor/atualizar-setor.usecase';
 import { DeletarSetorUseCase } from '@/src/domain/application/usecases/setor/deletar-setor.usecase';
 import { ListarSetoresUseCase } from '@/src/domain/application/usecases/setor/listar-setores.usecase';
+import { GetAllSetoresUseCase } from '@/src/domain/application/usecases/setor/get-all-setores.usecase';
 
 @Module({
   controllers: [SetorController],
@@ -18,6 +19,7 @@ import { ListarSetoresUseCase } from '@/src/domain/application/usecases/setor/li
     AtualizarSetorUseCase,
     DeletarSetorUseCase,
     ListarSetoresUseCase,
+    GetAllSetoresUseCase,
   ],
 })
 export class SetorModule {}

@@ -112,8 +112,8 @@ model UsuarioSetorPrisma {
   setorId   String
   createdAt DateTime @default(now()) @db.Timestamptz(3)
 
-  usuario UsuarioPrisma @relation(fields: [usuarioId], references: [id])
-  setor   SetorPrisma   @relation(fields: [setorId], references: [id])
+  usuario UsuarioPrisma @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+  setor   SetorPrisma   @relation(fields: [setorId], references: [id], onDelete: Cascade)
 
   @@id([usuarioId, setorId])
   @@map("usuarios_setores")
@@ -124,8 +124,8 @@ model ProjetoSetorPrisma {
   setorId   String
   createdAt DateTime @default(now()) @db.Timestamptz(3)
 
-  projeto ProjetoPrisma @relation(fields: [projetoId], references: [id])
-  setor   SetorPrisma   @relation(fields: [setorId], references: [id])
+  projeto ProjetoPrisma @relation(fields: [projetoId], references: [id], onDelete: Cascade)
+  setor   SetorPrisma   @relation(fields: [setorId], references: [id], onDelete: Cascade)
 
   @@id([projetoId, setorId])
   @@map("projetos_setores")

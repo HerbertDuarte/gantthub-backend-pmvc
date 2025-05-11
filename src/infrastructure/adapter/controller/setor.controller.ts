@@ -22,6 +22,7 @@ import { ListarSetoresUseCase } from '@/src/domain/application/usecases/setor/li
 import { SetorPrismaExtended } from '../../repository/setor-prisma.repository';
 import { PaginateResponse } from 'lib-test-herbert';
 import { PaginateSetorDto } from '@/src/domain/application/dto/setor/paginate-setor.dto';
+import { GetAllSetoresUseCase } from '@/src/domain/application/usecases/setor/get-all-setores.usecase';
 
 @ApiBearerAuth()
 @Controller('setor')
@@ -33,6 +34,7 @@ export class SetorController {
     private readonly atualizarSetorUseCase: AtualizarSetorUseCase,
     private readonly deletarSetorUseCase: DeletarSetorUseCase,
     private readonly listarSetoresUseCase: ListarSetoresUseCase,
+    private readonly getAllSetoresUseCase: GetAllSetoresUseCase,
   ) {}
 
   @Get()
@@ -41,6 +43,12 @@ export class SetorController {
     @Query() queryPrams?: PaginateSetorDto,
   ): Promise<PaginateResponse<SetorPrismaExtended>> {
     return this.listarSetoresUseCase.execute(queryPrams);
+  }
+
+  @Get('filtragem')
+  @UseGuards(JwtAuthGuard)
+  async getAll(): Promise<SetorPrismaExtended[]> {
+    return this.getAllSetoresUseCase.execute();
   }
 
   @Get(':id')
@@ -60,7 +68,7 @@ export class SetorController {
   async update(
     @Param('id') id: string,
     @Body() data: AtualizaSetorDto,
-  ): Promise<SetorPrisma> {
+  ): Promise<void> {
     return this.atualizarSetorUseCase.execute(id, data);
   }
 
