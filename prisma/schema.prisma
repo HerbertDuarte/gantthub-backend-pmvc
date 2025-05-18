@@ -8,20 +8,21 @@ datasource db {
 }
 
 model UsuarioPrisma {
-  id              String               @id @default(uuid())
-  nome            String
-  email           String               @unique
-  situacao        Int                  @default(1)
-  login           String               @unique
-  role            Int                  @default(1)
-  refreshToken    String?
-  senha           String
-  imageUrl        String?
-  createdAt       DateTime             @default(now()) @db.Timestamptz(3)
-  usuariosSetores UsuarioSetorPrisma[]
-  tarefas         TarefaPrisma[]
-  projetos        ProjetoPrisma[]
-  subTarefas      SubTarefaPrisma[]
+  id               String                 @id @default(uuid())
+  nome             String
+  email            String                 @unique
+  situacao         Int                    @default(1)
+  login            String                 @unique
+  role             Int                    @default(1)
+  refreshToken     String?
+  senha            String
+  imageUrl         String?
+  createdAt        DateTime               @default(now()) @db.Timestamptz(3)
+  usuariosSetores  UsuarioSetorPrisma[]
+  tarefas          TarefaPrisma[]
+  projetos         ProjetoPrisma[]
+  subTarefas       SubTarefaPrisma[]
+  usuariosProjetos UsuarioProjetoPrisma[]
 
   @@map("usuarios")
 }
@@ -32,10 +33,11 @@ model ProjetoPrisma {
   descricao String?
   marcos    MarcoPrisma[]
 
-  createdBy       UsuarioPrisma        @relation(fields: [createdById], references: [id])
-  createdById     String               @default("1d52e4f9-ce43-48a6-b0fd-78bf5470c22f")
-  createdAt       DateTime             @default(now()) @db.Timestamptz(3)
-  projetosSetores ProjetoSetorPrisma[]
+  createdBy        UsuarioPrisma          @relation(fields: [createdById], references: [id])
+  createdById      String
+  createdAt        DateTime               @default(now()) @db.Timestamptz(3)
+  projetosSetores  ProjetoSetorPrisma[]
+  usuariosProjetos UsuarioProjetoPrisma[]
 
   @@map("projetos")
 }
@@ -129,4 +131,16 @@ model ProjetoSetorPrisma {
 
   @@id([projetoId, setorId])
   @@map("projetos_setores")
+}
+
+model UsuarioProjetoPrisma {
+  projetoId String
+  usuarioId String
+  createdAt DateTime @default(now()) @db.Timestamptz(3)
+
+  projeto ProjetoPrisma @relation(fields: [projetoId], references: [id], onDelete: Cascade)
+  usuario UsuarioPrisma @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+
+  @@id([projetoId, usuarioId])
+  @@map("usuario_projeto")
 }
