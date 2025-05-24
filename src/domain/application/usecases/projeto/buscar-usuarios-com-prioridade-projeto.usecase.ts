@@ -16,7 +16,6 @@ export class BuscarUsuariosComPrioridadeProjetoUseCase
     props: PaginateUsuarioProjetoDto,
     usuarioId?: string,
   ): Promise<PaginateResponse<UsuarioPrisma>> {
-    // Se o usuarioId for fornecido, verifica se ele tem relação com o projeto
     if (usuarioId) {
       const temRelacao =
         await this.projetoRepository.isUsuarioRelacionadoAoProjeto(

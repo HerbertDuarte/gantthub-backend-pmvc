@@ -10,7 +10,6 @@ export class BuscarPorIdReduzidoProjetoUseCase
   constructor(private readonly projetoRepository: ProjetoPrismaRepository) {}
 
   async execute(id: string, usuarioId?: string): Promise<ProjetoPrisma> {
-    // Se o usuarioId for fornecido, verifica se ele tem relação com o projeto
     if (usuarioId) {
       const temRelacao =
         await this.projetoRepository.isUsuarioRelacionadoAoProjeto(

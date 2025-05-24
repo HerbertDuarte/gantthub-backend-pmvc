@@ -22,17 +22,16 @@ export class ProjetoPrismaRepository {
 
     const queries: any = {};
 
-    // Se for informado o usuarioId, filtra apenas os projetos do usuário
     if (usuarioId) {
       queries.OR = [
-        { createdById: usuarioId }, // Projetos criados pelo usuário
+        { createdById: usuarioId },
         {
           usuariosProjetos: {
             some: {
               usuarioId: usuarioId,
             },
           },
-        }, // Projetos onde o usuário é participante
+        },
       ];
     }
 
@@ -49,6 +48,9 @@ export class ProjetoPrismaRepository {
         createdBy: true,
         usuariosProjetos: {
           include: { usuario: true },
+        },
+        projetoSetor: {
+          include: { setor: true },
         },
       },
     });
@@ -123,14 +125,11 @@ export class ProjetoPrismaRepository {
     descricao: string,
     createdById: string,
   ): Promise<ProjetoPrisma> {
-    // Criando o projeto e o vínculo com o usuário criador na mesma transação
     return this.prismaService.$transaction(async (tx) => {
-      // Cria o projeto
       const projeto = await tx.projetoPrisma.create({
         data: { nome, descricao, createdById },
       });
 
-      // Cria o vínculo usuário-projeto para o criador
       await tx.usuarioProjetoPrisma.create({
         data: {
           projetoId: projeto.id,
@@ -188,7 +187,6 @@ export class ProjetoPrismaRepository {
     projetoId: string,
     usuarioId: string,
   ): Promise<boolean> {
-    // Verificar se o projeto existe
     const projetoExists = await this.prismaService.projetoPrisma.findUnique({
       where: { id: projetoId },
     });
@@ -197,12 +195,10 @@ export class ProjetoPrismaRepository {
       throw new NotFoundException('Projeto não encontrado');
     }
 
-    // Verificar se o usuário é o criador do projeto
     if (projetoExists.createdById === usuarioId) {
       return true;
     }
 
-    // Verificar se o usuário está vinculado ao projeto
     const vinculo = await this.prismaService.usuarioProjetoPrisma.findUnique({
       where: {
         projetoId_usuarioId: {

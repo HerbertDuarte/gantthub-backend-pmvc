@@ -12,7 +12,6 @@ export class DesvincularUsuarioProjetoUseCase implements UseCase<void> {
   ) {}
 
   async execute(dados: RemoveUsuarioProjetoDto): Promise<void> {
-    // Verificar se o usuário é o criador do projeto
     const creatorId = await this.projetoRepository.findCreatorId(
       dados.projetoId,
     );

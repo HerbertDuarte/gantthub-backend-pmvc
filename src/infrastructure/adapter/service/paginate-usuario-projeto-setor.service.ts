@@ -1,18 +1,18 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '@/src/infrastructure/plugins/database/services/prisma.service';
-import { PaginateUsuarioProjetoDto } from '@/src/domain/application/dto/usuario/paginate-usuario-projeto.dto';
+import { PaginateUsuarioProjetoDto } from '@/src/domain/application/dto/usuario-setor/paginate-usuario-projeto.dto';
 import { PaginateResponse } from 'lib-test-herbert';
 import { UsuarioPrisma } from '@prisma/client';
 
 @Injectable()
-export class PaginateUsuarioProjetoService {
+export class PaginateUsuarioProjetoSetorService {
   constructor(private readonly prismaService: PrismaService) {}
 
   async paginate(
     projetoId: string,
     props: PaginateUsuarioProjetoDto,
   ): Promise<PaginateResponse<UsuarioPrisma>> {
-    const { busca, pagina, itensPorPagina, situacao } = props;
+    const { busca, pagina, itensPorPagina } = props;
 
     const projetoExists = await this.prismaService.projetoPrisma.findUnique({
       where: { id: projetoId },
@@ -23,17 +23,14 @@ export class PaginateUsuarioProjetoService {
     }
 
     const usuariosDoProjeto =
-      await this.prismaService.usuarioProjetoPrisma.findMany({
+      await this.prismaService.usuarioSetorPrisma.findMany({
         where: { projetoId },
         select: { usuarioId: true },
       });
 
-    const idsUsuariosDoProjeto = usuariosDoProjeto.map((up) => up.usuarioId);
+    const idsUsuariosDoProjeto = usuariosDoProjeto.map((us) => us.usuarioId);
 
     const whereClause: any = {};
-    if (situacao !== undefined) {
-      whereClause.situacao = situacao;
-    }
 
     if (busca) {
       whereClause.OR = [

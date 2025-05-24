@@ -7,7 +7,6 @@ export class DeletarProjetoUseCase implements UseCase<void> {
   constructor(private readonly projetoRepository: ProjetoPrismaRepository) {}
 
   async execute(id: string, usuarioId?: string): Promise<void> {
-    // Se o usuarioId for fornecido, verifica se o usuário tem relação com o projeto
     if (usuarioId) {
       const temRelacao =
         await this.projetoRepository.isUsuarioRelacionadoAoProjeto(
@@ -21,7 +20,6 @@ export class DeletarProjetoUseCase implements UseCase<void> {
         );
       }
 
-      // Podemos ser mais restritivos e permitir apenas que o criador exclua o projeto
       const creatorId = await this.projetoRepository.findCreatorId(id);
       if (creatorId !== usuarioId) {
         throw new ForbiddenException(

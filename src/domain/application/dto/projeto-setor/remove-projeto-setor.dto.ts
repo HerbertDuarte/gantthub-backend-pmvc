@@ -1,14 +1,18 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsString } from 'class-validator';
 
-export class CriaProjetoSetorDto {
+export class RemoveProjetoSetorDto {
   @ApiProperty()
+  @IsNotEmpty({
+    message: 'Informe o ID do projeto',
+  })
   @IsString()
-  @IsNotEmpty({ message: 'O ID do projeto é obrigatório' })
   projetoId: string;
 
   @ApiProperty()
+  @IsNotEmpty({
+    message: 'Informe o ID do setor',
+  })
   @IsString()
-  @IsNotEmpty({ message: 'O ID do setor é obrigatório' })
   setorId: string;
 }

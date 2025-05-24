@@ -1,4 +1,4 @@
 export interface AdicionaRemoveUsuarioSetorDto {
-  setorId: string;
+  projetoId: string;
   usuarioId: string;
 }

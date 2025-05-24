@@ -8,20 +8,21 @@ datasource db {
 }
 
 model UsuarioPrisma {
-  id               String                 @id @default(uuid())
-  nome             String
-  email            String                 @unique
-  situacao         Int                    @default(1)
-  login            String                 @unique
-  role             Int                    @default(1)
-  refreshToken     String?
-  senha            String
-  imageUrl         String?
-  createdAt        DateTime               @default(now()) @db.Timestamptz(3)
-  tarefas          TarefaPrisma[]
-  projetos         ProjetoPrisma[]
-  subTarefas       SubTarefaPrisma[]
-  usuariosProjetos UsuarioProjetoPrisma[]
+  id                 String                 @id @default(uuid())
+  nome               String
+  email              String                 @unique
+  situacao           Int                    @default(1)
+  login              String                 @unique
+  role               Int                    @default(1)
+  refreshToken       String?
+  senha              String
+  imageUrl           String?
+  createdAt          DateTime               @default(now()) @db.Timestamptz(3)
+  tarefas            TarefaPrisma[]
+  projetos           ProjetoPrisma[]
+  subTarefas         SubTarefaPrisma[]
+  usuariosProjetos   UsuarioProjetoPrisma[]
+  UsuarioSetorPrisma UsuarioSetorPrisma[]
 
   @@map("usuarios")
 }
@@ -37,6 +38,7 @@ model ProjetoPrisma {
   createdAt        DateTime               @default(now()) @db.Timestamptz(3)
   usuariosProjetos UsuarioProjetoPrisma[]
   projetoSetor     ProjetoSetorPrisma[]
+  usuarioSetor     UsuarioSetorPrisma[]
 
   @@map("projetos")
 }
@@ -122,4 +124,15 @@ model ProjetoSetorPrisma {
 
   @@id([setorId, projetoId])
   @@map("projeto_setor")
+}
+
+model UsuarioSetorPrisma {
+  usuarioId String
+  projetoId String
+
+  usuario UsuarioPrisma @relation(fields: [usuarioId], references: [id])
+  projeto ProjetoPrisma @relation(fields: [projetoId], references: [id])
+
+  @@id([usuarioId, projetoId])
+  @@map("projeto_usuario")
 }

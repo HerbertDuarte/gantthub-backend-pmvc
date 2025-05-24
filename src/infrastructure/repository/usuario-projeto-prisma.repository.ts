@@ -15,7 +15,6 @@ export class UsuarioProjetoPrismaRepository {
     projetoId: string;
     createdAt: Date;
   }): Promise<UsuarioProjetoPrisma> {
-    // Verificar se o usuário existe
     const usuarioExists = await this.prismaService.usuarioPrisma.findUnique({
       where: { id: dados.usuarioId },
     });
@@ -24,7 +23,6 @@ export class UsuarioProjetoPrismaRepository {
       throw new NotFoundException('Usuário não encontrado');
     }
 
-    // Verificar se o projeto existe
     const projetoExists = await this.prismaService.projetoPrisma.findUnique({
       where: { id: dados.projetoId },
     });
@@ -33,7 +31,6 @@ export class UsuarioProjetoPrismaRepository {
       throw new NotFoundException('Projeto não encontrado');
     }
 
-    // Verificar se o vínculo já existe
     const vinculoExists =
       await this.prismaService.usuarioProjetoPrisma.findUnique({
         where: {
@@ -54,7 +51,6 @@ export class UsuarioProjetoPrismaRepository {
   }
 
   async desvincular(usuarioId: string, projetoId: string): Promise<void> {
-    // Verificar se o vínculo existe
     const vinculoExists =
       await this.prismaService.usuarioProjetoPrisma.findUnique({
         where: {
@@ -71,7 +67,6 @@ export class UsuarioProjetoPrismaRepository {
       );
     }
 
-    // Verificar se é o criador do projeto (dupla verificação em caso de erro no usecase)
     const projeto = await this.prismaService.projetoPrisma.findUnique({
       where: { id: projetoId },
       select: { createdById: true },

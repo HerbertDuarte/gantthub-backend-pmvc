@@ -23,7 +23,6 @@ export class AtualizarProjetoUseCase implements UseCase<ProjetoPrisma> {
       );
     }
 
-    // Se o usuarioId for fornecido, verifica se ele tem relação com o projeto
     if (usuarioId) {
       const temRelacao =
         await this.projetoRepository.isUsuarioRelacionadoAoProjeto(

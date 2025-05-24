@@ -26,14 +26,12 @@ export class SubtarefaValidatorService {
     const tarefaPaiInicio = new Date(tarefaPai.dataInicio);
     const tarefaPaiFim = new Date(tarefaPai.dataFim);
 
-    // Validar se as datas da subtarefa estão dentro do período da tarefa pai
     if (subTarefaInicio < tarefaPaiInicio || subTarefaFim > tarefaPaiFim) {
       throw new DataValidationException(
         'O período da subtarefa deve estar dentro do período da tarefa pai',
       );
     }
 
-    // Validar se a data de início é anterior à data de fim
     if (subTarefaInicio > subTarefaFim) {
       throw new DataValidationException(
         'A data de início deve ser anterior ou igual à data de fim',
