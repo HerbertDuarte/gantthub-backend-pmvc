@@ -3,7 +3,6 @@ import { PassportStrategy } from '@nestjs/passport';
 import { Injectable, Logger, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { UsuarioPrismaRepository } from '@/src/infrastructure/repository/usuario-prisma.repository';
-
 import { UsuarioJWTPayload } from '../../../domain/application/dto/auth/usuario-jwt-payload.dto';
 import { UsuarioPrisma } from '@prisma/client';
 
@@ -38,6 +37,7 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
     if (!usuario) {
       throw new UnauthorizedException('Usuário não encontrado');
     }
+    console.log(usuario);
     return usuario;
   }
 

@@ -24,7 +24,7 @@ export class AtualizarPerfilUsuarioUseCase implements UseCase<UsuarioPrisma> {
 
     const atualizaUsuarioPayload: Partial<CriaUsuarioDto> = data;
 
-    const atualizaSenha = data.senhaNova;
+    const atualizaSenha = !!data.senhaNova;
 
     if (atualizaSenha) {
       await this.senhaValidaValidator.validate(usuarioExists, data);
@@ -36,6 +36,9 @@ export class AtualizarPerfilUsuarioUseCase implements UseCase<UsuarioPrisma> {
       atualizaUsuarioPayload,
     );
 
+    const { email, login, nome, senha } = atualizaUsuarioPayload;
+    const allowedUpdateFields = { email, login, nome, senha };
+
     const usuario = UsuarioPrismaBuilder.build({
       id: usuarioExists.id,
       email: usuarioExists.email,
@@ -44,9 +47,8 @@ export class AtualizarPerfilUsuarioUseCase implements UseCase<UsuarioPrisma> {
       createdAt: usuarioExists.createdAt,
       senha: usuarioExists.senha,
       situacao: usuarioExists.situacao,
-      ...atualizaUsuarioPayload,
+      ...allowedUpdateFields,
     });
-
     await this.usuarioRepository.atualiza(id, usuario);
   }
 }

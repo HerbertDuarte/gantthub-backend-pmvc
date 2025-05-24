@@ -10,7 +10,7 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
     context: ExecutionContext,
     status?: any,
   ): TUser {
-    if (err && !user) {
+    if (err || !user) {
       throw err || new Error('Usuário não autenticado');
     }
     return user;

@@ -2,6 +2,7 @@ import { IsNotEmpty, IsString, IsEmail, IsNumber } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 import { EnumSituacaoUsuario } from '../../../enum/usuario-situacao.enum';
+import { EnumRoleUsuario } from '@/src/domain/enum/usuario-role.enum';
 
 export class CriaUsuarioDto {
   @ApiProperty()
@@ -24,6 +25,13 @@ export class CriaUsuarioDto {
   })
   @IsNumber()
   situacao: EnumSituacaoUsuario;
+
+  @ApiProperty()
+  @IsNotEmpty({
+    message: 'Informe o nível do Usuário',
+  })
+  @IsNumber()
+  role: EnumRoleUsuario;
 
   @ApiProperty()
   @IsNotEmpty({

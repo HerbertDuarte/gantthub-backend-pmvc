@@ -18,7 +18,6 @@ model UsuarioPrisma {
   senha            String
   imageUrl         String?
   createdAt        DateTime               @default(now()) @db.Timestamptz(3)
-  usuariosSetores  UsuarioSetorPrisma[]
   tarefas          TarefaPrisma[]
   projetos         ProjetoPrisma[]
   subTarefas       SubTarefaPrisma[]
@@ -36,7 +35,6 @@ model ProjetoPrisma {
   createdBy        UsuarioPrisma          @relation(fields: [createdById], references: [id])
   createdById      String
   createdAt        DateTime               @default(now()) @db.Timestamptz(3)
-  projetosSetores  ProjetoSetorPrisma[]
   usuariosProjetos UsuarioProjetoPrisma[]
 
   @@map("projetos")
@@ -91,46 +89,6 @@ model SubTarefaPrisma {
   tarefaPaiId String
 
   @@map("sub_tarefas")
-}
-
-model SetorPrisma {
-  id        String   @id @default(uuid())
-  nome      String
-  createdAt DateTime @default(now()) @db.Timestamptz(3)
-
-  usuariosSetores UsuarioSetorPrisma[]
-
-  // Relações para hierarquia de setores
-  subSetores      SetorPrisma[]        @relation("SubSetores")
-  setorPai        SetorPrisma?         @relation("SubSetores", fields: [setorPaiId], references: [id], onDelete: Cascade)
-  setorPaiId      String?
-  projetosSetores ProjetoSetorPrisma[]
-
-  @@map("setores")
-}
-
-model UsuarioSetorPrisma {
-  usuarioId String
-  setorId   String
-  createdAt DateTime @default(now()) @db.Timestamptz(3)
-
-  usuario UsuarioPrisma @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
-  setor   SetorPrisma   @relation(fields: [setorId], references: [id], onDelete: Cascade)
-
-  @@id([usuarioId, setorId])
-  @@map("usuarios_setores")
-}
-
-model ProjetoSetorPrisma {
-  projetoId String
-  setorId   String
-  createdAt DateTime @default(now()) @db.Timestamptz(3)
-
-  projeto ProjetoPrisma @relation(fields: [projetoId], references: [id], onDelete: Cascade)
-  setor   SetorPrisma   @relation(fields: [setorId], references: [id], onDelete: Cascade)
-
-  @@id([projetoId, setorId])
-  @@map("projetos_setores")
 }
 
 model UsuarioProjetoPrisma {

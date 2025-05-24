@@ -8,6 +8,7 @@ import {
 import { ApiProperty } from '@nestjs/swagger';
 
 import { EnumSituacaoUsuario } from '../../../enum/usuario-situacao.enum';
+import { EnumRoleUsuario } from '@/src/domain/enum/usuario-role.enum';
 
 export class AtualizaUsuarioDto {
   @ApiProperty()
@@ -25,6 +26,12 @@ export class AtualizaUsuarioDto {
   @IsEnum(EnumSituacaoUsuario)
   @IsNumber()
   situacao?: EnumSituacaoUsuario;
+
+  @ApiProperty()
+  @IsOptional()
+  @IsEnum(EnumRoleUsuario)
+  @IsNumber()
+  role?: EnumRoleUsuario;
 
   @ApiProperty()
   @IsOptional()

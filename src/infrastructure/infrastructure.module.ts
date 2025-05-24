@@ -24,9 +24,6 @@ import { ProjetoModule } from './module/projeto.module';
 import { MarcoModule } from './module/marco.module';
 import { TarefaModule } from './module/tarefa.module';
 import { SubTarefaModule } from './module/subtarefa.module';
-import { SetorModule } from './module/setor.module';
-import { UsuarioSetorModule } from './module/usuario-setor.module';
-import { ProjetoSetorModule } from './module/projeto-setor.module';
 import { UsuarioProjetoModule } from './module/usuario-projeto.module';
 
 const usecases: Provider[] = [
@@ -64,9 +61,6 @@ const providers: Provider[] = [
     MarcoModule,
     TarefaModule,
     SubTarefaModule,
-    SetorModule,
-    UsuarioSetorModule,
-    ProjetoSetorModule,
     UsuarioProjetoModule,
     PassportModule.register({ defaultStrategy: 'jwt' }),
     DatabaseModule,

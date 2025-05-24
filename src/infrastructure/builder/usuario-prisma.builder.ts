@@ -39,6 +39,7 @@ export class UsuarioPrismaBuilder {
   }
 
   private static buildSenha(senha: string) {
+    if (!senha) return;
     if (isHash(senha)) {
       return senha;
     }
@@ -54,7 +55,7 @@ export class UsuarioPrismaBuilder {
   private static validatePassword(senha: string) {
     const ABILITAR_VALIDACAO_FORTE = false;
     const MIN_LENGTH = 6;
-    if (senha.length < MIN_LENGTH) {
+    if (senha && senha.length < MIN_LENGTH) {
       throw new BadRequestException(
         `Senha deve ter no mínimo ${MIN_LENGTH} caracteres.`,
       );

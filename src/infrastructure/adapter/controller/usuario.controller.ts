@@ -51,12 +51,6 @@ export class UsuarioController {
     return this.buscarUsuariosPaginacaoUseCase.execute(queryPrams);
   }
 
-  @Get('/:id')
-  @UseGuards(JwtAuthGuard)
-  async findById(@Param('id') id: string): Promise<UsuarioPrisma> {
-    return this.buscarPorIdUsuarioUseCase.execute(id);
-  }
-
   @Get('/perfil')
   @UseGuards(JwtAuthGuard)
   async getPerfil(@Req() req: Request) {
@@ -72,6 +66,12 @@ export class UsuarioController {
   ): Promise<void> {
     const userId = req.user.id;
     return this.atualizaPerfilUsuarioUseCase.execute(userId, data);
+  }
+
+  @Get('/:id')
+  @UseGuards(JwtAuthGuard)
+  async findById(@Param('id') id: string): Promise<UsuarioPrisma> {
+    return this.buscarPorIdUsuarioUseCase.execute(id);
   }
 
   @Delete('/:id')

@@ -26,6 +26,7 @@ export class CriarUsuarioUseCase implements UseCase<UsuarioPrisma> {
       login: data.login,
       nome: data.nome,
       senha: data.senha,
+      role: data.role,
     });
     return this.usuarioRepository.cria(usuario);
   }
