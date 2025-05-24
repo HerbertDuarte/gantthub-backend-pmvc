@@ -40,7 +40,6 @@ export class AtualizarUsuarioUseCase implements UseCase<UsuarioPrisma> {
     );
 
     const { email, login, nome, senha, role } = atualizaUsuarioPayload;
-    console.log({ email, login, nome, senha, role });
     const allowedUpdateFields = { email, login, nome, senha, role };
 
     const usuario = UsuarioPrismaBuilder.build({

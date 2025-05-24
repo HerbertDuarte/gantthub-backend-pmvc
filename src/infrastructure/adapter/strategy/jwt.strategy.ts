@@ -37,7 +37,6 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
     if (!usuario) {
       throw new UnauthorizedException('Usuário não encontrado');
     }
-    console.log(usuario);
     return usuario;
   }
 
