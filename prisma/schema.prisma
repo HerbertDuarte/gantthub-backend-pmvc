@@ -36,6 +36,7 @@ model ProjetoPrisma {
   createdById      String
   createdAt        DateTime               @default(now()) @db.Timestamptz(3)
   usuariosProjetos UsuarioProjetoPrisma[]
+  projetoSetor     ProjetoSetorPrisma[]
 
   @@map("projetos")
 }
@@ -101,4 +102,24 @@ model UsuarioProjetoPrisma {
 
   @@id([projetoId, usuarioId])
   @@map("usuario_projeto")
+}
+
+model SetorPrisma {
+  setorId      String               @id @default(uuid())
+  nome         String
+  cor          String
+  projetoSetor ProjetoSetorPrisma[]
+
+  @@map("setores")
+}
+
+model ProjetoSetorPrisma {
+  setorId   String
+  projetoId String
+
+  setor   SetorPrisma   @relation(fields: [setorId], references: [setorId])
+  projeto ProjetoPrisma @relation(fields: [projetoId], references: [id])
+
+  @@id([setorId, projetoId])
+  @@map("projeto_setor")
 }
