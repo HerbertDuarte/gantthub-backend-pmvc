@@ -18,4 +18,9 @@ export class PaginateProjetoDto implements PaginatePropsBase {
   @IsString()
   @IsOptional()
   busca?: string;
+
+  @ApiProperty()
+  @IsString()
+  @IsOptional()
+  setores?: string;
 }

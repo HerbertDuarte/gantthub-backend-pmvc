@@ -24,6 +24,11 @@ export class UsuarioPrismaRepository {
       pagina,
       itensPorPagina,
       queries: { situacao },
+      include: {
+        usuariosSetores: {
+          include: { setor: true },
+        },
+      },
     });
   }
 

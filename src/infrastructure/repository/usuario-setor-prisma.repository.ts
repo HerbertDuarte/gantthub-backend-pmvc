@@ -12,7 +12,7 @@ export class UsuarioSetorPrismaRepository {
 
   async vincular(dados: {
     usuarioId: string;
-    projetoId: string;
+    setorId: string;
   }): Promise<UsuarioSetorPrisma> {
     const usuarioExists = await this.prismaService.usuarioPrisma.findUnique({
       where: { id: dados.usuarioId },
@@ -22,47 +22,44 @@ export class UsuarioSetorPrismaRepository {
       throw new NotFoundException('Usuário não encontrado');
     }
 
-    const projetoExists = await this.prismaService.projetoPrisma.findUnique({
-      where: { id: dados.projetoId },
+    const setorExists = await this.prismaService.setorPrisma.findUnique({
+      where: { setorId: dados.setorId },
     });
 
-    if (!projetoExists) {
-      throw new NotFoundException('Projeto não encontrado');
+    if (!setorExists) {
+      throw new NotFoundException('Setor não encontrado');
     }
 
-    const vinculoExists =
-      await this.prismaService.usuarioSetorPrisma.findUnique({
+    const vinculoExists = await this.prismaService.usuarioSetorPrisma.findFirst(
+      {
         where: {
-          usuarioId_projetoId: {
-            usuarioId: dados.usuarioId,
-            projetoId: dados.projetoId,
-          },
+          usuarioId: dados.usuarioId,
+          setorId: dados.setorId,
         },
-      });
+      },
+    );
 
     if (vinculoExists) {
-      throw new ConflictException('Usuário já vinculado ao projeto');
+      throw new ConflictException('Usuário já vinculado ao setor');
     }
 
     return this.prismaService.usuarioSetorPrisma.create({
       data: dados,
       include: {
         usuario: true,
-        projeto: true,
+        setor: true,
       },
     });
   }
 
   async desvincular(dados: {
     usuarioId: string;
-    projetoId: string;
+    setorId: string;
   }): Promise<void> {
-    const vinculo = await this.prismaService.usuarioSetorPrisma.findUnique({
+    const vinculo = await this.prismaService.usuarioSetorPrisma.findFirst({
       where: {
-        usuarioId_projetoId: {
-          usuarioId: dados.usuarioId,
-          projetoId: dados.projetoId,
-        },
+        usuarioId: dados.usuarioId,
+        setorId: dados.setorId,
       },
     });
 
@@ -72,9 +69,9 @@ export class UsuarioSetorPrismaRepository {
 
     await this.prismaService.usuarioSetorPrisma.delete({
       where: {
-        usuarioId_projetoId: {
+        usuarioId_setorId: {
           usuarioId: dados.usuarioId,
-          projetoId: dados.projetoId,
+          setorId: dados.setorId,
         },
       },
     });
@@ -93,25 +90,25 @@ export class UsuarioSetorPrismaRepository {
       where: { usuarioId },
       include: {
         usuario: true,
-        projeto: true,
+        setor: true,
       },
     });
   }
 
-  async buscarPorProjeto(projetoId: string): Promise<UsuarioSetorPrisma[]> {
-    const projetoExists = await this.prismaService.projetoPrisma.findUnique({
-      where: { id: projetoId },
+  async buscarPorSetor(setorId: string): Promise<UsuarioSetorPrisma[]> {
+    const setorExists = await this.prismaService.setorPrisma.findUnique({
+      where: { setorId },
     });
 
-    if (!projetoExists) {
-      throw new NotFoundException('Projeto não encontrado');
+    if (!setorExists) {
+      throw new NotFoundException('Setor não encontrado');
     }
 
     return this.prismaService.usuarioSetorPrisma.findMany({
-      where: { projetoId },
+      where: { setorId },
       include: {
         usuario: true,
-        projeto: true,
+        setor: true,
       },
     });
   }
@@ -120,7 +117,7 @@ export class UsuarioSetorPrismaRepository {
     return this.prismaService.usuarioSetorPrisma.findMany({
       include: {
         usuario: true,
-        projeto: true,
+        setor: true,
       },
     });
   }

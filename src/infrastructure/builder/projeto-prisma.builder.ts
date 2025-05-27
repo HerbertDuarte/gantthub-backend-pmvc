@@ -15,6 +15,7 @@ export class ProjetoPrismaBuilder {
       createdById,
       createdAt: new Date(),
       updatedAt: new Date(),
+      status: 1,
     } as ProjetoPrisma;
   }
 }

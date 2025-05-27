@@ -3,12 +3,12 @@ import { IsNotEmpty, IsString } from 'class-validator';
 
 export class CriaUsuarioSetorDto {
   @ApiProperty()
-  @IsNotEmpty()
   @IsString()
+  @IsNotEmpty({ message: 'O ID do usuário é obrigatório' })
   usuarioId: string;
 
   @ApiProperty()
-  @IsNotEmpty()
   @IsString()
-  projetoId: string;
+  @IsNotEmpty({ message: 'O ID do setor é obrigatório' })
+  setorId: string;
 }

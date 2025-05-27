@@ -1,8 +1,8 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '@/src/infrastructure/plugins/database/services/prisma.service';
-import { PaginateProjetoUsuarioDto } from '@/src/domain/application/dto/usuario-setor/paginate-projeto-usuario.dto';
 import { PaginateResponse } from 'lib-test-herbert';
 import { ProjetoPrisma } from '@prisma/client';
+import { PaginateUsuarioProjetoDto } from '@/src/domain/application/dto/usuario/paginate-usuario-projeto.dto';
 
 @Injectable()
 export class PaginateProjetoUsuarioService {
@@ -10,7 +10,7 @@ export class PaginateProjetoUsuarioService {
 
   async paginate(
     usuarioId: string,
-    props: PaginateProjetoUsuarioDto,
+    props: PaginateUsuarioProjetoDto,
   ): Promise<PaginateResponse<ProjetoPrisma>> {
     const { busca, pagina, itensPorPagina } = props;
 
@@ -23,7 +23,7 @@ export class PaginateProjetoUsuarioService {
     }
 
     const projetosDoUsuario =
-      await this.prismaService.usuarioSetorPrisma.findMany({
+      await this.prismaService.usuarioProjetoPrisma.findMany({
         where: { usuarioId },
         select: { projetoId: true },
       });

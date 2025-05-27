@@ -8,21 +8,21 @@ datasource db {
 }
 
 model UsuarioPrisma {
-  id                 String                 @id @default(uuid())
-  nome               String
-  email              String                 @unique
-  situacao           Int                    @default(1)
-  login              String                 @unique
-  role               Int                    @default(1)
-  refreshToken       String?
-  senha              String
-  imageUrl           String?
-  createdAt          DateTime               @default(now()) @db.Timestamptz(3)
-  tarefas            TarefaPrisma[]
-  projetos           ProjetoPrisma[]
-  subTarefas         SubTarefaPrisma[]
-  usuariosProjetos   UsuarioProjetoPrisma[]
-  UsuarioSetorPrisma UsuarioSetorPrisma[]
+  id               String                 @id @default(uuid())
+  nome             String
+  email            String                 @unique
+  situacao         Int                    @default(1)
+  login            String                 @unique
+  role             Int                    @default(1)
+  refreshToken     String?
+  senha            String
+  imageUrl         String?
+  createdAt        DateTime               @default(now()) @db.Timestamptz(3)
+  tarefas          TarefaPrisma[]
+  projetos         ProjetoPrisma[]
+  subTarefas       SubTarefaPrisma[]
+  usuariosProjetos UsuarioProjetoPrisma[]
+  usuariosSetores  UsuarioSetorPrisma[]
 
   @@map("usuarios")
 }
@@ -32,13 +32,13 @@ model ProjetoPrisma {
   nome      String
   descricao String?
   marcos    MarcoPrisma[]
+  status    Int           @default(1)
 
   createdBy        UsuarioPrisma          @relation(fields: [createdById], references: [id])
   createdById      String
   createdAt        DateTime               @default(now()) @db.Timestamptz(3)
   usuariosProjetos UsuarioProjetoPrisma[]
   projetoSetor     ProjetoSetorPrisma[]
-  usuarioSetor     UsuarioSetorPrisma[]
 
   @@map("projetos")
 }
@@ -111,6 +111,7 @@ model SetorPrisma {
   nome         String
   cor          String
   projetoSetor ProjetoSetorPrisma[]
+  usuarioSetor UsuarioSetorPrisma[]
 
   @@map("setores")
 }
@@ -128,11 +129,11 @@ model ProjetoSetorPrisma {
 
 model UsuarioSetorPrisma {
   usuarioId String
-  projetoId String
+  setorId   String
 
   usuario UsuarioPrisma @relation(fields: [usuarioId], references: [id])
-  projeto ProjetoPrisma @relation(fields: [projetoId], references: [id])
+  setor   SetorPrisma   @relation(fields: [setorId], references: [setorId])
 
-  @@id([usuarioId, projetoId])
-  @@map("projeto_usuario")
+  @@id([usuarioId, setorId])
+  @@map("usuario_setor")
 }

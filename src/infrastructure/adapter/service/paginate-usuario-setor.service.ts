@@ -1,34 +1,34 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '@/src/infrastructure/plugins/database/services/prisma.service';
-import { PaginateUsuarioProjetoDto } from '@/src/domain/application/dto/usuario-setor/paginate-usuario-projeto.dto';
+import { PaginateUsuarioSetorDto } from '@/src/domain/application/dto/usuario-setor/paginate-usuario-setor.dto';
 import { PaginateResponse } from 'lib-test-herbert';
 import { UsuarioPrisma } from '@prisma/client';
 
 @Injectable()
-export class PaginateUsuarioProjetoSetorService {
+export class PaginateUsuarioSetorService {
   constructor(private readonly prismaService: PrismaService) {}
 
   async paginate(
-    projetoId: string,
-    props: PaginateUsuarioProjetoDto,
+    setorId: string,
+    props: PaginateUsuarioSetorDto,
   ): Promise<PaginateResponse<UsuarioPrisma>> {
     const { busca, pagina, itensPorPagina } = props;
 
-    const projetoExists = await this.prismaService.projetoPrisma.findUnique({
-      where: { id: projetoId },
+    const setorExists = await this.prismaService.setorPrisma.findUnique({
+      where: { setorId },
     });
 
-    if (!projetoExists) {
-      throw new NotFoundException('Projeto não encontrado');
+    if (!setorExists) {
+      throw new NotFoundException('Setor não encontrado');
     }
 
-    const usuariosDoProjeto =
+    const usuariosDoSetor =
       await this.prismaService.usuarioSetorPrisma.findMany({
-        where: { projetoId },
+        where: { setorId },
         select: { usuarioId: true },
       });
 
-    const idsUsuariosDoProjeto = usuariosDoProjeto.map((us) => us.usuarioId);
+    const idsUsuariosDoSetor = usuariosDoSetor.map((us) => us.usuarioId);
 
     const whereClause: any = {};
 
@@ -44,40 +44,39 @@ export class PaginateUsuarioProjetoSetorService {
       where: whereClause,
     });
 
-    const usuariosDoProjeto_ = await this.prismaService.usuarioPrisma.findMany({
+    const usuariosDoSetor_ = await this.prismaService.usuarioPrisma.findMany({
       where: {
         ...whereClause,
-        id: { in: idsUsuariosDoProjeto },
+        id: { in: idsUsuariosDoSetor },
       },
       orderBy: { nome: 'asc' },
       take:
-        idsUsuariosDoProjeto.length > itensPorPagina
-          ? itensPorPagina
-          : undefined,
+        idsUsuariosDoSetor.length > itensPorPagina ? itensPorPagina : undefined,
     });
 
-    if (usuariosDoProjeto_.length >= itensPorPagina) {
+    if (usuariosDoSetor_.length >= itensPorPagina) {
       return {
-        data: usuariosDoProjeto_,
+        data: usuariosDoSetor_,
         maxPag: Math.ceil(total / itensPorPagina),
       };
     }
 
-    const usuariosForaDoProjeto =
-      await this.prismaService.usuarioPrisma.findMany({
+    const usuariosForaDoSetor = await this.prismaService.usuarioPrisma.findMany(
+      {
         where: {
           ...whereClause,
-          id: { notIn: idsUsuariosDoProjeto },
+          id: { notIn: idsUsuariosDoSetor },
         },
         orderBy: { nome: 'asc' },
         skip:
           pagina > 1
-            ? (pagina - 1) * itensPorPagina - usuariosDoProjeto_.length
+            ? (pagina - 1) * itensPorPagina - usuariosDoSetor_.length
             : 0,
-        take: itensPorPagina - usuariosDoProjeto_.length,
-      });
+        take: itensPorPagina - usuariosDoSetor_.length,
+      },
+    );
 
-    const resultado = [...usuariosDoProjeto_, ...usuariosForaDoProjeto];
+    const resultado = [...usuariosDoSetor_, ...usuariosForaDoSetor];
 
     return {
       data: resultado,

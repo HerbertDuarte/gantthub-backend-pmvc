@@ -5,13 +5,11 @@ import { UsuarioSetorPrismaRepository } from '../repository/usuario-setor-prisma
 import { VincularUsuarioSetorUseCase } from '@/src/domain/application/usecases/usuario-setor/vincular-usuario-setor.usecase';
 import { DesvincularUsuarioSetorUseCase } from '@/src/domain/application/usecases/usuario-setor/desvincular-usuario-setor.usecase';
 import { BuscarPorUsuarioUsuarioSetorUseCase } from '@/src/domain/application/usecases/usuario-setor/buscar-por-usuario.usecase';
-import { BuscarPorProjetoUsuarioSetorUseCase } from '@/src/domain/application/usecases/usuario-setor/buscar-por-projeto.usecase';
+import { BuscarPorSetorUsuarioSetorUseCase } from '@/src/domain/application/usecases/usuario-setor/buscar-por-setor.usecase';
 import { BuscarTodosUsuarioSetorUseCase } from '@/src/domain/application/usecases/usuario-setor/buscar-todos.usecase';
-import { BuscarUsuariosProjetoPaginacaoUseCase } from '@/src/domain/application/usecases/usuario-setor/buscar-usuarios-projeto-paginacao.usecase';
-import { BuscarProjetosUsuarioPaginacaoUseCase } from '@/src/domain/application/usecases/usuario-setor/buscar-projetos-usuario-paginacao.usecase';
-import { PaginateUsuarioProjetoSetorService } from '../adapter/service/paginate-usuario-projeto-setor.service';
-import { PaginateProjetoUsuarioService } from '../adapter/service/paginate-projeto-usuario.service';
 import { PrismaService } from '../plugins/database/services/prisma.service';
+import { BuscarUsuariosSetorPaginacaoUseCase } from '@/src/domain/application/usecases/usuario-setor/buscar-usuarios-setor-paginacao.usecase';
+import { PaginateUsuarioSetorService } from '../adapter/service/paginate-usuario-setor.service';
 
 @Module({
   imports: [DatabaseModule],
@@ -19,15 +17,13 @@ import { PrismaService } from '../plugins/database/services/prisma.service';
   providers: [
     PrismaService,
     UsuarioSetorPrismaRepository,
-    PaginateUsuarioProjetoSetorService,
-    PaginateProjetoUsuarioService,
     VincularUsuarioSetorUseCase,
     DesvincularUsuarioSetorUseCase,
     BuscarPorUsuarioUsuarioSetorUseCase,
-    BuscarPorProjetoUsuarioSetorUseCase,
+    BuscarPorSetorUsuarioSetorUseCase,
     BuscarTodosUsuarioSetorUseCase,
-    BuscarUsuariosProjetoPaginacaoUseCase,
-    BuscarProjetosUsuarioPaginacaoUseCase,
+    BuscarUsuariosSetorPaginacaoUseCase,
+    PaginateUsuarioSetorService,
   ],
   exports: [UsuarioSetorPrismaRepository],
 })

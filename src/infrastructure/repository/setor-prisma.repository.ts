@@ -37,6 +37,21 @@ export class SetorPrismaRepository {
       busca,
       pagina,
       itensPorPagina,
+      include: {
+        usuarioSetor: {
+          include: { usuario: true },
+        },
+      },
+    });
+  }
+
+  async findAllWithoutPagination(userId?: string) {
+    return this.prismaService.setorPrisma.findMany({
+      include: {
+        usuarioSetor: {
+          include: { usuario: true },
+        },
+      },
     });
   }
 

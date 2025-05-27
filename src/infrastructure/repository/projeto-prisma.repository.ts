@@ -17,7 +17,8 @@ export class ProjetoPrismaRepository {
     props: PaginateProjetoDto,
     usuarioId?: string,
   ): Promise<PaginateResponse<ProjetoPrisma>> {
-    const { busca, pagina, itensPorPagina } = props;
+    const { busca, pagina, itensPorPagina, setores } = props;
+
     const paginateUtil = new PaginateUtil<ProjetoPrisma>(this.prismaService);
 
     const queries: any = {};
@@ -33,6 +34,22 @@ export class ProjetoPrismaRepository {
           },
         },
       ];
+    }
+
+    if (setores && setores.trim() !== '') {
+      const setoresId = setores
+        .split(',')
+        .map((id) => id.trim())
+        .filter((id) => id !== '');
+      if (setoresId.length > 0) {
+        queries.projetoSetor = {
+          some: {
+            setorId: {
+              in: setoresId,
+            },
+          },
+        };
+      }
     }
 
     return paginateUtil.execute({

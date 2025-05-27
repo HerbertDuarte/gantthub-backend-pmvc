@@ -3,12 +3,16 @@ import { IsNotEmpty, IsString } from 'class-validator';
 
 export class RemoveUsuarioSetorDto {
   @ApiProperty()
-  @IsNotEmpty()
+  @IsNotEmpty({
+    message: 'Informe o ID do usuário',
+  })
   @IsString()
   usuarioId: string;
 
   @ApiProperty()
-  @IsNotEmpty()
+  @IsNotEmpty({
+    message: 'Informe o ID do setor',
+  })
   @IsString()
-  projetoId: string;
+  setorId: string;
 }

@@ -4,14 +4,14 @@ import { UsuarioSetorPrismaRepository } from '@/src/infrastructure/repository/us
 import { UsuarioSetorPrisma } from '@prisma/client';
 
 @Injectable()
-export class BuscarPorProjetoUsuarioSetorUseCase
+export class BuscarPorSetorUsuarioSetorUseCase
   implements UseCase<UsuarioSetorPrisma[]>
 {
   constructor(
     private readonly usuarioSetorRepository: UsuarioSetorPrismaRepository,
   ) {}
 
-  async execute(projetoId: string): Promise<UsuarioSetorPrisma[]> {
-    return this.usuarioSetorRepository.buscarPorProjeto(projetoId);
+  async execute(setorId: string): Promise<UsuarioSetorPrisma[]> {
+    return this.usuarioSetorRepository.buscarPorSetor(setorId);
   }
 }

@@ -5,27 +5,17 @@ import {
   Get,
   Param,
   Post,
-  Query,
   UseGuards,
 } from '@nestjs/common';
 import { JwtAuthGuard } from '../guard/jwt-auth.guard';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import {
-  UsuarioSetorPrisma,
-  UsuarioPrisma,
-  ProjetoPrisma,
-} from '@prisma/client';
-import { PaginateResponse } from 'lib-test-herbert';
+import { UsuarioSetorPrisma } from '@prisma/client';
 import { VincularUsuarioSetorUseCase } from '@/src/domain/application/usecases/usuario-setor/vincular-usuario-setor.usecase';
 import { DesvincularUsuarioSetorUseCase } from '@/src/domain/application/usecases/usuario-setor/desvincular-usuario-setor.usecase';
 import { BuscarPorUsuarioUsuarioSetorUseCase } from '@/src/domain/application/usecases/usuario-setor/buscar-por-usuario.usecase';
-import { BuscarPorProjetoUsuarioSetorUseCase } from '@/src/domain/application/usecases/usuario-setor/buscar-por-projeto.usecase';
+import { BuscarPorSetorUsuarioSetorUseCase } from '@/src/domain/application/usecases/usuario-setor/buscar-por-setor.usecase';
 import { BuscarTodosUsuarioSetorUseCase } from '@/src/domain/application/usecases/usuario-setor/buscar-todos.usecase';
-import { BuscarUsuariosProjetoPaginacaoUseCase } from '@/src/domain/application/usecases/usuario-setor/buscar-usuarios-projeto-paginacao.usecase';
-import { BuscarProjetosUsuarioPaginacaoUseCase } from '@/src/domain/application/usecases/usuario-setor/buscar-projetos-usuario-paginacao.usecase';
 import { CriaUsuarioSetorDto } from '@/src/domain/application/dto/usuario-setor/cria-usuario-setor.dto';
-import { PaginateUsuarioProjetoDto } from '@/src/domain/application/dto/usuario-setor/paginate-usuario-projeto.dto';
-import { PaginateProjetoUsuarioDto } from '@/src/domain/application/dto/usuario-setor/paginate-projeto-usuario.dto';
 
 @ApiTags('Usuarios-Setores')
 @Controller('usuario-setor')
@@ -35,10 +25,8 @@ export class UsuarioSetorController {
     private readonly vincularUsuarioSetorUseCase: VincularUsuarioSetorUseCase,
     private readonly desvincularUsuarioSetorUseCase: DesvincularUsuarioSetorUseCase,
     private readonly buscarPorUsuarioUseCase: BuscarPorUsuarioUsuarioSetorUseCase,
-    private readonly buscarPorProjetoUseCase: BuscarPorProjetoUsuarioSetorUseCase,
+    private readonly buscarPorSetorUseCase: BuscarPorSetorUsuarioSetorUseCase,
     private readonly buscarTodosUseCase: BuscarTodosUsuarioSetorUseCase,
-    private readonly buscarUsuariosProjetoPaginacaoUseCase: BuscarUsuariosProjetoPaginacaoUseCase,
-    private readonly buscarProjetosUsuarioPaginacaoUseCase: BuscarProjetosUsuarioPaginacaoUseCase,
   ) {}
 
   @Post()
@@ -63,41 +51,23 @@ export class UsuarioSetorController {
     return this.buscarPorUsuarioUseCase.execute(usuarioId);
   }
 
-  @Get('projeto/:projetoId')
+  @Get('setor/:setorId')
   @UseGuards(JwtAuthGuard)
-  async listarPorProjeto(
-    @Param('projetoId') projetoId: string,
+  async listarPorSetor(
+    @Param('setorId') setorId: string,
   ): Promise<UsuarioSetorPrisma[]> {
-    return this.buscarPorProjetoUseCase.execute(projetoId);
+    return this.buscarPorSetorUseCase.execute(setorId);
   }
 
-  @Get('usuarios-projeto/:projetoId')
-  @UseGuards(JwtAuthGuard)
-  async listarUsuariosProjetoPaginacao(
-    @Param('projetoId') projetoId: string,
-    @Query() props?: PaginateUsuarioProjetoDto,
-  ): Promise<PaginateResponse<UsuarioPrisma>> {
-    return this.buscarUsuariosProjetoPaginacaoUseCase.execute(projetoId, props);
-  }
-
-  @Get('projetos-usuario/:usuarioId')
-  @UseGuards(JwtAuthGuard)
-  async listarProjetosUsuarioPaginacao(
-    @Param('usuarioId') usuarioId: string,
-    @Query() props?: PaginateProjetoUsuarioDto,
-  ): Promise<PaginateResponse<ProjetoPrisma>> {
-    return this.buscarProjetosUsuarioPaginacaoUseCase.execute(usuarioId, props);
-  }
-
-  @Delete('usuario/:usuarioId/projeto/:projetoId')
+  @Delete('usuario/:usuarioId/setor/:setorId')
   @UseGuards(JwtAuthGuard)
   async desvincular(
     @Param('usuarioId') usuarioId: string,
-    @Param('projetoId') projetoId: string,
+    @Param('setorId') setorId: string,
   ): Promise<void> {
     return this.desvincularUsuarioSetorUseCase.execute({
       usuarioId,
-      projetoId,
+      setorId,
     });
   }
 }

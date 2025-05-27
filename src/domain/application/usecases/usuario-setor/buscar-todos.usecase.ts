@@ -12,6 +12,6 @@ export class BuscarTodosUsuarioSetorUseCase
   ) {}
 
   async execute(): Promise<UsuarioSetorPrisma[]> {
-    return this.usuarioSetorRepository.buscarTodos();
+    return await this.usuarioSetorRepository.buscarTodos();
   }
 }

@@ -13,6 +13,9 @@ export class VincularUsuarioSetorUseCase
   ) {}
 
   async execute(dados: CriaUsuarioSetorDto): Promise<UsuarioSetorPrisma> {
-    return this.usuarioSetorRepository.vincular(dados);
+    return this.usuarioSetorRepository.vincular({
+      usuarioId: dados.usuarioId,
+      setorId: dados.setorId,
+    });
   }
 }
